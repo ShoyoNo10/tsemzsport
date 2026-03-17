@@ -16,23 +16,31 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     .sort({ createdAt: -1 })
     .lean();
 
-  return NextResponse.json(
-    registrations.map((item) => ({
-      _id: String(item._id),
-      lastName: item.lastName,
-      firstName: item.firstName,
-      registerNumber: item.registerNumber,
-      phonePrimary: item.phonePrimary,
-      phoneEmergency: item.phoneEmergency,
-      homeAddress: item.homeAddress,
-      classOptionId: String(item.classOptionId),
-      branchId: String(item.branchId),
-      scheduleTemplateId: String(item.scheduleTemplateId),
-      status: item.status,
-      paymentStatus: item.paymentStatus,
-      qpayDeepLink: item.qpayDeepLink,
-      createdAt: item.createdAt.toISOString(),
-      updatedAt: item.updatedAt.toISOString(),
-    }))
-  );
+return NextResponse.json(
+  registrations.map((item) => ({
+    _id: String(item._id),
+    lastName: item.lastName,
+    firstName: item.firstName,
+    registerNumber: item.registerNumber,
+    phonePrimary: item.phonePrimary,
+    phoneEmergency: item.phoneEmergency,
+    homeAddress: item.homeAddress,
+    classOptionId: String(item.classOptionId),
+    branchId: String(item.branchId),
+    scheduleTemplateId: String(item.scheduleTemplateId),
+    status: item.status,
+    paymentStatus: item.paymentStatus,
+    qpayInvoiceId: item.qpayInvoiceId,
+    qpayPaymentId: item.qpayPaymentId,
+    qpayQrText: item.qpayQrText,
+    qpayQrImage: item.qpayQrImage,
+    qpayPaymentUrl: item.qpayPaymentUrl,
+    qpayDeepLink: item.qpayDeepLink,
+    qpayShortUrl: item.qpayShortUrl,
+    qpayUrls: item.qpayUrls,
+    paidAt: item.paidAt ? item.paidAt.toISOString() : undefined,
+    createdAt: item.createdAt.toISOString(),
+    updatedAt: item.updatedAt.toISOString(),
+  }))
+);
 }

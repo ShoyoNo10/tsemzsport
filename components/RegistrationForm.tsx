@@ -125,15 +125,26 @@ export default function RegistrationForm() {
         body: JSON.stringify(form),
       });
 
-      const result = (await response.json()) as {
-        message: string;
-        registration?: {
-          _id: string;
-          status: string;
-          paymentStatus: string;
-          qpayDeepLink: string;
-        };
-      };
+const result = (await response.json()) as {
+  message: string;
+  registration?: {
+    _id: string;
+    status: string;
+    paymentStatus: string;
+    qpayInvoiceId: string;
+    qpayQrText: string;
+    qpayQrImage: string;
+    qpayPaymentUrl: string;
+    qpayDeepLink: string;
+    qpayShortUrl: string;
+    qpayUrls: {
+      name: string;
+      description: string;
+      logo: string;
+      link: string;
+    }[];
+  };
+};
 
       if (!response.ok) {
         setErrorMessage(result.message ?? "Алдаа гарлаа");
@@ -142,9 +153,9 @@ export default function RegistrationForm() {
 
       setSuccessMessage(result.message);
 
-      if (result.registration?.qpayDeepLink) {
-        window.location.href = result.registration.qpayDeepLink;
-      }
+if (result.registration?._id) {
+  window.location.href = `/payment/${result.registration._id}`;
+}
     } catch (error) {
       setErrorMessage("Сервертэй холбогдож чадсангүй");
     } finally {
