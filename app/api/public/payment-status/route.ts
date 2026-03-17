@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectDb } from "@/lib/db";
 import { checkQPayPayment } from "@/lib/qpay";
 import { RegistrationModel } from "@/models/Registration";
+import { getPaidDeleteAt } from "@/lib/registration-time";
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
@@ -43,14 +44,16 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       return statusValue === "paid" || statusValue === "success";
     });
 
-    if (paidRow) {
-      registration.paymentStatus = "paid";
-      registration.status = "paid";
-      registration.qpayPaymentId =
-        typeof paidRow.payment_id === "string" ? paidRow.payment_id : "";
-      registration.paidAt = new Date();
-      await registration.save();
-    }
+if (paidRow) {
+  registration.paymentStatus = "paid";
+  registration.status = "paid";
+  registration.qpayPaymentId =
+    typeof paidRow.payment_id === "string" ? paidRow.payment_id : "";
+  registration.paidAt = new Date();
+  registration.deleteAt = getPaidDeleteAt();
+
+  await registration.save();
+}
 
     return NextResponse.json({
       registration: {

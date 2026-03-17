@@ -1,5 +1,33 @@
 import { InferSchemaType, Model, Schema, model, models } from "mongoose";
 
+const qpayUrlSchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    description: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    logo: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    link: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+  },
+  {
+    _id: false,
+  }
+);
+
 const registrationSchema = new Schema(
   {
     lastName: {
@@ -49,13 +77,13 @@ const registrationSchema = new Schema(
     },
     status: {
       type: String,
-      enum: ["draft", "submitted", "payment_pending", "paid", "cancelled"],
+      enum: ["draft", "submitted", "payment_pending", "paid", "cancelled", "expired"],
       default: "payment_pending",
       required: true,
     },
     paymentStatus: {
       type: String,
-      enum: ["unpaid", "pending", "paid", "failed"],
+      enum: ["unpaid", "pending", "paid", "failed", "expired"],
       default: "pending",
       required: true,
     },
@@ -95,19 +123,19 @@ const registrationSchema = new Schema(
       default: "",
     },
     qpayUrls: {
-      type: [
-        {
-          name: { type: String, required: true, trim: true },
-          description: { type: String, required: true, trim: true },
-          logo: { type: String, required: true, trim: true },
-          link: { type: String, required: true, trim: true },
-        },
-      ],
+      type: [qpayUrlSchema],
       default: [],
     },
     paidAt: {
       type: Date,
       required: false,
+    },
+    deleteAt: {
+      type: Date,
+      required: true,
+      index: {
+        expires: 0,
+      },
     },
   },
   {

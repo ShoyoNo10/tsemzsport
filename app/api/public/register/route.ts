@@ -1,13 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDb } from "@/lib/db";
 import { createRegistrationSchema } from "@/lib/validations";
-import {
-  createQPayInvoice,
-  getBestPaymentLink,
-} from "@/lib/qpay";
+import { createQPayInvoice, getBestPaymentLink } from "@/lib/qpay";
 import { ClassOptionModel } from "@/models/ClassOption";
 import { RegistrationModel } from "@/models/Registration";
 import { env } from "@/lib/env";
+import { getPendingDeleteAt } from "@/lib/registration-time";
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
@@ -22,18 +20,20 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
           message: "Мэдээлэл буруу байна",
           errors: parsed.error.flatten(),
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     const data = parsed.data;
 
-    const classOption = await ClassOptionModel.findById(data.classOptionId).lean();
+    const classOption = await ClassOptionModel.findById(
+      data.classOptionId,
+    ).lean();
 
     if (!classOption || classOption.status !== "active") {
       return NextResponse.json(
         { message: "Сонгосон анги олдсонгүй" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -57,6 +57,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       qpayDeepLink: "",
       qpayShortUrl: "",
       qpayUrls: [],
+      deleteAt: getPendingDeleteAt(),
     });
 
     const senderInvoiceNo = `REG-${String(created._id)}`;
@@ -79,15 +80,15 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     created.qpayQrText = invoice.qrText;
     created.qpayQrImage = invoice.qrImage;
     created.qpayShortUrl = invoice.qPayShortUrl;
-   created.set(
-  "qpayUrls",
-  invoice.urls.map((item) => ({
-    name: item.name,
-    description: item.description,
-    logo: item.logo,
-    link: item.link,
-  }))
-);
+    created.set(
+      "qpayUrls",
+      invoice.urls.map((item) => ({
+        name: item.name,
+        description: item.description,
+        logo: item.logo,
+        link: item.link,
+      })),
+    );
     created.qpayPaymentUrl = bestPaymentLink;
     created.qpayDeepLink = bestPaymentLink;
 
@@ -117,7 +118,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         message: "Бүртгэл үүсгэх үед алдаа гарлаа",
         error: message,
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

@@ -2,13 +2,15 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectDb } from "@/lib/db";
 import { checkQPayPayment } from "@/lib/qpay";
 import { RegistrationModel } from "@/models/Registration";
+import { getPaidDeleteAt } from "@/lib/registration-time";
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
     await connectDb();
 
-    const qpayPaymentId = request.nextUrl.searchParams.get("payment_id")
-      ?? request.nextUrl.searchParams.get("qpay_payment_id");
+    const qpayPaymentId =
+      request.nextUrl.searchParams.get("payment_id") ??
+      request.nextUrl.searchParams.get("qpay_payment_id");
 
     if (!qpayPaymentId) {
       return new NextResponse("SUCCESS", { status: 200 });
@@ -43,6 +45,8 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         registration.qpayPaymentId =
           typeof paidRow.payment_id === "string" ? paidRow.payment_id : "";
         registration.paidAt = new Date();
+        registration.deleteAt = getPaidDeleteAt();
+
         await registration.save();
         break;
       }
