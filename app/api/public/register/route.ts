@@ -79,7 +79,15 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     created.qpayQrText = invoice.qrText;
     created.qpayQrImage = invoice.qrImage;
     created.qpayShortUrl = invoice.qPayShortUrl;
-    created.qpayUrls = invoice.urls;
+   created.set(
+  "qpayUrls",
+  invoice.urls.map((item) => ({
+    name: item.name,
+    description: item.description,
+    logo: item.logo,
+    link: item.link,
+  }))
+);
     created.qpayPaymentUrl = bestPaymentLink;
     created.qpayDeepLink = bestPaymentLink;
 
