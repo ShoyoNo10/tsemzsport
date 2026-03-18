@@ -1,4 +1,5 @@
 import mongoose, { Model, Schema } from "mongoose";
+
 interface OrderItemDocument {
   productId: string;
   productName: string;
@@ -9,6 +10,13 @@ interface OrderItemDocument {
   lineTotal: number;
 }
 
+interface QPayOrderUrlDocument {
+  name: string;
+  description: string;
+  logo: string;
+  link: string;
+}
+
 interface OrderDocument {
   customerPhone: string;
   alternatePhone?: string;
@@ -16,8 +24,17 @@ interface OrderDocument {
   items: OrderItemDocument[];
   totalAmount: number;
   status: "pending" | "paid" | "cancelled";
-  paymentReference?: string;
-  qpayDeepLink?: string;
+
+  qpayInvoiceId: string;
+  qpayPaymentId: string;
+  qpayQrText: string;
+  qpayQrImage: string;
+  qpayPaymentUrl: string;
+  qpayDeepLink: string;
+  qpayShortUrl: string;
+  qpayUrls: QPayOrderUrlDocument[];
+  paidAt?: Date | null;
+
   createdAt: Date;
   updatedAt: Date;
 }
@@ -34,6 +51,17 @@ const OrderItemSchema = new Schema<OrderItemDocument>(
   },
   { _id: false }
 );
+
+const QPayOrderUrlSchema = new Schema<QPayOrderUrlDocument>(
+  {
+    name: { type: String, required: true },
+    description: { type: String, required: true },
+    logo: { type: String, required: true },
+    link: { type: String, required: true },
+  },
+  { _id: false }
+);
+
 const OrderSchema = new Schema<OrderDocument>(
   {
     customerPhone: {
@@ -66,7 +94,28 @@ const OrderSchema = new Schema<OrderDocument>(
       enum: ["pending", "paid", "cancelled"],
       default: "pending",
     },
-    paymentReference: {
+
+    qpayInvoiceId: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+    qpayPaymentId: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+    qpayQrText: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+    qpayQrImage: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+    qpayPaymentUrl: {
       type: String,
       default: "",
       trim: true,
@@ -75,6 +124,19 @@ const OrderSchema = new Schema<OrderDocument>(
       type: String,
       default: "",
       trim: true,
+    },
+    qpayShortUrl: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+    qpayUrls: {
+      type: [QPayOrderUrlSchema],
+      default: [],
+    },
+    paidAt: {
+      type: Date,
+      default: null,
     },
   },
   {

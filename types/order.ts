@@ -10,6 +10,13 @@ export interface OrderItem {
   lineTotal: number;
 }
 
+export interface QPayOrderUrl {
+  name: string;
+  description: string;
+  logo: string;
+  link: string;
+}
+
 export interface Order {
   _id: string;
   customerPhone: string;
@@ -18,8 +25,17 @@ export interface Order {
   items: OrderItem[];
   totalAmount: number;
   status: OrderStatus;
-  paymentReference?: string;
+
+  qpayInvoiceId?: string;
+  qpayPaymentId?: string;
+  qpayQrText?: string;
+  qpayQrImage?: string;
+  qpayPaymentUrl?: string;
   qpayDeepLink?: string;
+  qpayShortUrl?: string;
+  qpayUrls?: QPayOrderUrl[];
+  paidAt?: string;
+
   createdAt?: string;
   updatedAt?: string;
 }
