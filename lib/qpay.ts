@@ -435,17 +435,17 @@ export const getBestPaymentLink = (urls: QPayUrl[]): string => {
     return "";
   }
 
+  const firstHttps = urls.find((item) => item.link.startsWith("https://"));
+  if (firstHttps) {
+    return firstHttps.link;
+  }
+
   const qpayWallet = urls.find((item) =>
     item.link.toLowerCase().startsWith("qpaywallet://")
   );
 
   if (qpayWallet) {
     return qpayWallet.link;
-  }
-
-  const firstHttps = urls.find((item) => item.link.startsWith("https://"));
-  if (firstHttps) {
-    return firstHttps.link;
   }
 
   return urls[0].link;
