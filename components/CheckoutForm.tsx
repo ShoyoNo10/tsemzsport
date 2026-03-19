@@ -140,6 +140,8 @@ interface CreateOrderResponse {
   order?: {
     _id: string;
     qpayDeepLink: string;
+    qpayShortUrl: string;
+    qpayQrImage: string;
   };
 }
 
@@ -187,18 +189,20 @@ export default function CheckoutForm() {
 
       const data = (await response.json()) as CreateOrderResponse;
 
-      if (!response.ok || !data.order?._id || !data.order.qpayDeepLink) {
-        setError(data.error || data.message || "Алдаа гарлаа");
-        return;
-      }
+if (!response.ok || !data.order?._id) {
+  setError(data.error || data.message || "Алдаа гарлаа");
+  return;
+}
 
-      clearCart();
+clearCart();
 
-      router.push(
-        `/order-success?orderId=${data.order._id}&pay=${encodeURIComponent(
-          data.order.qpayDeepLink
-        )}`
-      );
+router.push(
+  `/order-success?orderId=${data.order._id}&pay=${encodeURIComponent(
+    data.order.qpayDeepLink || ""
+  )}&short=${encodeURIComponent(data.order.qpayShortUrl || "")}&qr=${encodeURIComponent(
+    data.order.qpayQrImage || ""
+  )}`
+);
     } catch {
       setError("Серверийн алдаа гарлаа");
     } finally {

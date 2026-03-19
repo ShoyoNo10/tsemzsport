@@ -153,21 +153,21 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
     await created.save();
 
-    return NextResponse.json({
-      message: "Захиалга амжилттай үүслээ",
-      order: {
-        _id: String(created._id),
-        status: created.status,
-        totalAmount: created.totalAmount,
-        qpayInvoiceId: created.qpayInvoiceId,
-        qpayQrText: created.qpayQrText,
-        qpayQrImage: created.qpayQrImage,
-        qpayPaymentUrl: created.qpayPaymentUrl,
-        qpayDeepLink: created.qpayDeepLink,
-        qpayShortUrl: created.qpayShortUrl,
-        qpayUrls: created.qpayUrls,
-      },
-    });
+return NextResponse.json({
+  message: "Захиалга амжилттай үүслээ",
+  order: {
+    _id: String(created._id),
+    status: created.status,
+    totalAmount: created.totalAmount,
+    qpayInvoiceId: created.qpayInvoiceId,
+    qpayQrText: created.qpayQrText,
+    qpayQrImage: created.qpayQrImage,
+    qpayPaymentUrl: created.qpayPaymentUrl,
+    qpayDeepLink: created.qpayDeepLink,
+    qpayShortUrl: created.qpayShortUrl,
+    qpayUrls: created.qpayUrls,
+  },
+});
   } catch (error) {
     const message =
       error instanceof Error ? error.message : "Захиалга үүсгэх үед алдаа гарлаа";
