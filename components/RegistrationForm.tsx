@@ -65,18 +65,12 @@ export default function RegistrationForm() {
   }, [classOptions, form.classOptionId]);
 
   const selectedBranch = useMemo(() => {
-    if (!selectedClass) {
-      return null;
-    }
-
+    if (!selectedClass) return null;
     return branches.find((item) => item._id === selectedClass.branchId) ?? null;
   }, [branches, selectedClass]);
 
   const selectedSchedule = useMemo(() => {
-    if (!selectedClass) {
-      return null;
-    }
-
+    if (!selectedClass) return null;
     return (
       schedules.find((item) => item._id === selectedClass.scheduleTemplateId) ?? null
     );
@@ -125,26 +119,26 @@ export default function RegistrationForm() {
         body: JSON.stringify(form),
       });
 
-const result = (await response.json()) as {
-  message: string;
-  registration?: {
-    _id: string;
-    status: string;
-    paymentStatus: string;
-    qpayInvoiceId: string;
-    qpayQrText: string;
-    qpayQrImage: string;
-    qpayPaymentUrl: string;
-    qpayDeepLink: string;
-    qpayShortUrl: string;
-    qpayUrls: {
-      name: string;
-      description: string;
-      logo: string;
-      link: string;
-    }[];
-  };
-};
+      const result = (await response.json()) as {
+        message: string;
+        registration?: {
+          _id: string;
+          status: string;
+          paymentStatus: string;
+          qpayInvoiceId: string;
+          qpayQrText: string;
+          qpayQrImage: string;
+          qpayPaymentUrl: string;
+          qpayDeepLink: string;
+          qpayShortUrl: string;
+          qpayUrls: {
+            name: string;
+            description: string;
+            logo: string;
+            link: string;
+          }[];
+        };
+      };
 
       if (!response.ok) {
         setErrorMessage(result.message ?? "Алдаа гарлаа");
@@ -153,9 +147,9 @@ const result = (await response.json()) as {
 
       setSuccessMessage(result.message);
 
-if (result.registration?._id) {
-  window.location.href = `/payment/${result.registration._id}`;
-}
+      if (result.registration?._id) {
+        window.location.href = `/payment/${result.registration._id}`;
+      }
     } catch (error) {
       setErrorMessage("Сервертэй холбогдож чадсангүй");
     } finally {
@@ -164,154 +158,233 @@ if (result.registration?._id) {
   };
 
   if (loading) {
-    return <div className="text-white">Уншиж байна...</div>;
+    return (
+      <div className="mx-auto max-w-4xl rounded-3xl border border-white/10 bg-white/10 p-8 text-center text-white shadow-2xl backdrop-blur-xl">
+        <div className="mx-auto mb-4 h-10 w-10 animate-spin rounded-full border-4 border-white/20 border-t-cyan-400" />
+        <p className="text-sm text-slate-200">Уншиж байна...</p>
+      </div>
+    );
   }
 
+  const inputClassName =
+    "w-full rounded-2xl border border-slate-200 bg-white/90 px-4 py-3.5 text-slate-900 outline-none transition duration-200 placeholder:text-slate-400 focus:border-cyan-500 focus:ring-4 focus:ring-cyan-500/15";
+  const labelClassName = "mb-2 block text-sm font-semibold text-slate-700";
+
   return (
-    <div className="mx-auto max-w-3xl rounded-2xl bg-white p-6 shadow-xl">
-      <div className="grid gap-4 sm:grid-cols-2">
-        <div>
-          <label className="mb-2 block text-sm font-medium text-gray-700">Овог</label>
-          <input
-            name="lastName"
-            value={form.lastName}
+    <div className="mx-auto grid max-w-6xl gap-6 lg:grid-cols-[1.2fr_0.8fr]">
+      <div className="rounded-[28px] border border-white/10 bg-white/95 p-5 shadow-[0_20px_80px_rgba(0,0,0,0.25)] backdrop-blur-xl sm:p-8">
+        <div className="mb-6">
+          <h2 className="text-2xl font-bold text-slate-900">
+            Бүртгэлийн мэдээлэл
+          </h2>
+          <p className="mt-2 text-sm text-slate-500">
+            Мэдээллээ зөв бөглөөд ангиа сонгоно уу.
+          </p>
+        </div>
+
+        <div className="grid gap-5 sm:grid-cols-2">
+          <div>
+            <label className={labelClassName}>Овог</label>
+            <input
+              name="lastName"
+              value={form.lastName}
+              onChange={handleChange}
+              placeholder="Жишээ: Бат"
+              className={inputClassName}
+            />
+          </div>
+
+          <div>
+            <label className={labelClassName}>Нэр</label>
+            <input
+              name="firstName"
+              value={form.firstName}
+              onChange={handleChange}
+              placeholder="Жишээ: Тэмүүлэн"
+              className={inputClassName}
+            />
+          </div>
+
+          <div>
+            <label className={labelClassName}>Регистрийн дугаар</label>
+            <input
+              name="registerNumber"
+              value={form.registerNumber}
+              onChange={handleChange}
+              placeholder="AA00000000"
+              className={`${inputClassName} uppercase`}
+            />
+          </div>
+
+          <div>
+            <label className={labelClassName}>Утасны дугаар</label>
+            <input
+              name="phonePrimary"
+              value={form.phonePrimary}
+              onChange={handleChange}
+              placeholder="99112233"
+              className={inputClassName}
+            />
+          </div>
+
+          <div>
+            <label className={labelClassName}>Яаралтай үед холбогдох утас</label>
+            <input
+              name="phoneEmergency"
+              value={form.phoneEmergency}
+              onChange={handleChange}
+              placeholder="88112233"
+              className={inputClassName}
+            />
+          </div>
+
+          <div className="sm:col-span-2">
+            <label className={labelClassName}>Анги сонголт</label>
+            <select
+              name="classOptionId"
+              value={form.classOptionId}
+              onChange={handleChange}
+              className={inputClassName}
+            >
+              <option value="">Сонгоно уу</option>
+              {classOptions.map((item) => (
+                <option key={item._id} value={item._id}>
+                  {item.title} — {item.ageRangeLabel} — {item.price.toLocaleString()}₮
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="sm:col-span-2">
+            {selectedClass && selectedBranch && selectedSchedule ? (
+              <div className="rounded-[24px] border border-cyan-200 bg-gradient-to-br from-cyan-50 to-blue-50 p-5 shadow-sm">
+                <h3 className="text-lg font-bold text-slate-900">
+                  Сонгосон ангийн мэдээлэл
+                </h3>
+
+                <div className="mt-4 grid gap-4 md:grid-cols-2">
+                  <div className="rounded-2xl bg-white p-4">
+                    <p className="text-xs font-semibold uppercase tracking-wide text-cyan-700">
+                      Анги
+                    </p>
+                    <p className="mt-1 text-base font-bold text-slate-900">
+                      {selectedClass.title}
+                    </p>
+                    <p className="mt-1 text-slate-600">{selectedClass.ageRangeLabel}</p>
+                  </div>
+
+                  <div className="rounded-2xl bg-white p-4">
+                    <p className="text-xs font-semibold uppercase tracking-wide text-cyan-700">
+                      Үнэ
+                    </p>
+                    <p className="mt-1 text-lg font-bold text-slate-900">
+                      {selectedClass.price.toLocaleString()}₮
+                    </p>
+                  </div>
+
+                  <div className="rounded-2xl bg-white p-4">
+                    <p className="text-xs font-semibold uppercase tracking-wide text-cyan-700">
+                      Салбар
+                    </p>
+                    <p className="mt-1 font-semibold text-slate-900">
+                      {selectedBranch.name}
+                    </p>
+                    <p className="mt-1 text-slate-600">{selectedBranch.address}</p>
+                  </div>
+
+                  <div className="rounded-2xl bg-white p-4">
+                    <p className="text-xs font-semibold uppercase tracking-wide text-cyan-700">
+                      7 хоногт
+                    </p>
+                    <p className="mt-1 text-lg font-bold text-slate-900">
+                      {selectedSchedule.sessionsPerWeek} удаа
+                    </p>
+                  </div>
+                </div>
+
+                <div className="mt-4 rounded-2xl bg-white p-4">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-cyan-700">
+                    Цагийн хуваарь
+                  </p>
+
+                  <ul className="mt-3 space-y-2">
+                    {selectedSchedule.slots.map((slot, index) => (
+                      <li
+                        key={`${slot.day}-${slot.startTime}-${slot.endTime}-${index}`}
+                        className="flex items-center justify-between rounded-xl bg-slate-50 px-4 py-3"
+                      >
+                        <span className="font-medium text-slate-800">{slot.day}</span>
+                        <span className="text-slate-600">
+                          {slot.startTime} - {slot.endTime}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            ) : (
+              <div className="rounded-[24px] border border-dashed border-slate-300 bg-slate-50 p-5">
+                <h3 className="text-base font-bold text-slate-900">
+                  Сонгосон ангийн мэдээлэл
+                </h3>
+                <p className="mt-2 text-sm text-slate-500">
+                  Анги сонгосны дараа үнэ, салбар, хуваарь энд гарч ирнэ.
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="mt-5">
+          <label className={labelClassName}>Гэрийн хаяг</label>
+          <textarea
+            name="homeAddress"
+            value={form.homeAddress}
             onChange={handleChange}
-            className="w-full rounded-xl border px-4 py-3 outline-none focus:border-blue-500"
+            rows={4}
+            placeholder="Дэлгэрэнгүй хаягаа бичнэ үү"
+            className={`${inputClassName} resize-none`}
           />
         </div>
 
-        <div>
-          <label className="mb-2 block text-sm font-medium text-gray-700">Нэр</label>
-          <input
-            name="firstName"
-            value={form.firstName}
-            onChange={handleChange}
-            className="w-full rounded-xl border px-4 py-3 outline-none focus:border-blue-500"
-          />
-        </div>
+        {errorMessage ? (
+          <div className="mt-5 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+            {errorMessage}
+          </div>
+        ) : null}
 
-        <div>
-          <label className="mb-2 block text-sm font-medium text-gray-700">Регистр</label>
-          <input
-            name="registerNumber"
-            value={form.registerNumber}
-            onChange={handleChange}
-            className="w-full rounded-xl border px-4 py-3 uppercase outline-none focus:border-blue-500"
-          />
-        </div>
+        {successMessage ? (
+          <div className="mt-5 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+            {successMessage}
+          </div>
+        ) : null}
 
-        <div>
-          <label className="mb-2 block text-sm font-medium text-gray-700">Утас 1</label>
-          <input
-            name="phonePrimary"
-            value={form.phonePrimary}
-            onChange={handleChange}
-            className="w-full rounded-xl border px-4 py-3 outline-none focus:border-blue-500"
-          />
-        </div>
-
-        <div>
-          <label className="mb-2 block text-sm font-medium text-gray-700">
-            Яаралтай үед утас
-          </label>
-          <input
-            name="phoneEmergency"
-            value={form.phoneEmergency}
-            onChange={handleChange}
-            className="w-full rounded-xl border px-4 py-3 outline-none focus:border-blue-500"
-          />
-        </div>
-
-        <div>
-          <label className="mb-2 block text-sm font-medium text-gray-700">
-            Анги сонголт
-          </label>
-          <select
-            name="classOptionId"
-            value={form.classOptionId}
-            onChange={handleChange}
-            className="w-full rounded-xl border px-4 py-3 outline-none focus:border-blue-500"
-          >
-            <option value="">Сонгоно уу</option>
-            {classOptions.map((item) => (
-              <option key={item._id} value={item._id}>
-                {item.title} — {item.ageRangeLabel} — {item.price.toLocaleString()}₮
-              </option>
-            ))}
-          </select>
-        </div>
+        <button
+          type="button"
+          onClick={() => void handleSubmit()}
+          disabled={!isFormValid || submitting}
+          className="mt-6 w-full rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 px-6 py-4 text-base font-bold text-white shadow-lg shadow-cyan-500/20 transition duration-200 hover:scale-[1.01] hover:from-cyan-400 hover:to-blue-500 disabled:cursor-not-allowed disabled:from-slate-400 disabled:to-slate-500"
+        >
+          {submitting ? "Түр хүлээнэ үү..." : "Төлбөр төлөх"}
+        </button>
       </div>
 
-      <div className="mt-4">
-        <label className="mb-2 block text-sm font-medium text-gray-700">Гэрийн хаяг</label>
-        <textarea
-          name="homeAddress"
-          value={form.homeAddress}
-          onChange={handleChange}
-          rows={3}
-          className="w-full rounded-xl border px-4 py-3 outline-none focus:border-blue-500"
-        />
-      </div>
-
-      {selectedClass && selectedBranch && selectedSchedule ? (
-        <div className="mt-6 rounded-2xl bg-slate-50 p-4">
-          <h3 className="text-lg font-semibold text-slate-800">Сонгосон ангийн мэдээлэл</h3>
-          <div className="mt-3 space-y-2 text-sm text-slate-700">
-            <p>
-              <span className="font-semibold">Анги:</span> {selectedClass.title}
-            </p>
-            <p>
-              <span className="font-semibold">Насны ангилал:</span>{" "}
-              {selectedClass.ageRangeLabel}
-            </p>
-            <p>
-              <span className="font-semibold">Үнэ:</span>{" "}
-              {selectedClass.price.toLocaleString()}₮
-            </p>
-            <p>
-              <span className="font-semibold">Салбар:</span> {selectedBranch.name}
-            </p>
-            <p>
-              <span className="font-semibold">Хаяг:</span> {selectedBranch.address}
-            </p>
-            <p>
-              <span className="font-semibold">7 хоногт:</span>{" "}
-              {selectedSchedule.sessionsPerWeek} удаа
-            </p>
-            <div>
-              <span className="font-semibold">Цагийн хуваарь:</span>
-              <ul className="mt-2 list-disc pl-5">
-                {selectedSchedule.slots.map((slot, index) => (
-                  <li key={`${slot.day}-${slot.startTime}-${slot.endTime}-${index}`}>
-                    {slot.day} — {slot.startTime} - {slot.endTime}
-                  </li>
-                ))}
-              </ul>
+      <div className="space-y-6">
+        <div className="rounded-[28px] border border-white/10 bg-white/10 p-6 text-white shadow-[0_20px_80px_rgba(0,0,0,0.25)] backdrop-blur-xl">
+          <h3 className="text-xl font-bold">Яагаад манай сургалт?</h3>
+          <div className="mt-4 space-y-3 text-sm text-slate-200">
+            <div className="rounded-2xl bg-white/10 p-4">
+              ✅ Түвшин бүрт тохирсон анги
+            </div>
+            <div className="rounded-2xl bg-white/10 p-4">
+              ✅ Тогтмол хуваарь, орчин нөхцөл
+            </div>
+            <div className="rounded-2xl bg-white/10 p-4">
+              ✅ Хурдан бүртгэл, шууд төлбөр
             </div>
           </div>
         </div>
-      ) : null}
-
-      {errorMessage ? (
-        <p className="mt-4 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-600">
-          {errorMessage}
-        </p>
-      ) : null}
-
-      {successMessage ? (
-        <p className="mt-4 rounded-xl bg-green-50 px-4 py-3 text-sm text-green-700">
-          {successMessage}
-        </p>
-      ) : null}
-
-      <button
-        type="button"
-        onClick={() => void handleSubmit()}
-        disabled={!isFormValid || submitting}
-        className="mt-6 w-full rounded-xl bg-blue-600 px-6 py-4 text-lg font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-400"
-      >
-        {submitting ? "Түр хүлээнэ үү..." : "Төлбөр төлөх"}
-      </button>
+      </div>
     </div>
   );
 }

@@ -30,18 +30,30 @@ export default function ProductDetailPage() {
 
   if (!product) {
     return (
-      <main className="min-h-screen bg-gradient-to-b from-white to-gray-50 px-4 py-10">
-        <div className="mx-auto max-w-5xl">
-          <div className="animate-pulse space-y-4">
-            <div className="h-5 w-24 rounded bg-gray-200" />
-            <div className="overflow-hidden rounded-3xl bg-gray-200">
-              <div className="aspect-square w-full" />
-            </div>
-            <div className="space-y-3">
-              <div className="h-4 w-24 rounded bg-gray-200" />
-              <div className="h-8 w-3/4 rounded bg-gray-200" />
-              <div className="h-7 w-32 rounded bg-gray-200" />
-              <div className="h-20 w-full rounded bg-gray-200" />
+      <main className="relative min-h-screen overflow-hidden bg-slate-950 px-4 py-6 sm:px-6 sm:py-8">
+        <div className="absolute inset-0">
+          <div className="absolute left-[-120px] top-[-120px] h-72 w-72 rounded-full bg-cyan-500/20 blur-3xl" />
+          <div className="absolute right-[-120px] top-32 h-80 w-80 rounded-full bg-blue-600/20 blur-3xl" />
+          <div className="absolute bottom-[-120px] left-1/2 h-80 w-80 -translate-x-1/2 rounded-full bg-indigo-500/20 blur-3xl" />
+        </div>
+
+        <div className="relative mx-auto max-w-6xl animate-pulse">
+          <div className="mb-6 flex items-center justify-between">
+            <div className="h-10 w-28 rounded-full bg-white/10" />
+            <div className="h-10 w-24 rounded-full bg-white/10" />
+          </div>
+
+          <div className="overflow-hidden rounded-[32px] border border-white/10 bg-white/10 shadow-[0_20px_80px_rgba(0,0,0,0.35)] backdrop-blur-xl">
+            <div className="grid md:grid-cols-2">
+              <div className="aspect-square bg-white/10" />
+              <div className="space-y-4 p-5 sm:p-8">
+                <div className="h-4 w-28 rounded bg-white/10" />
+                <div className="h-10 w-3/4 rounded bg-white/10" />
+                <div className="h-8 w-40 rounded bg-white/10" />
+                <div className="h-28 w-full rounded-2xl bg-white/10" />
+                <div className="h-24 w-full rounded-2xl bg-white/10" />
+                <div className="h-16 w-full rounded-2xl bg-white/10" />
+              </div>
             </div>
           </div>
         </div>
@@ -50,12 +62,20 @@ export default function ProductDetailPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-white via-gray-50 to-white px-4 py-4 sm:px-6 sm:py-6">
-      <div className="mx-auto max-w-5xl">
-        <div className="mb-4 flex items-center justify-between gap-3 sm:mb-6">
+    <main className="relative min-h-screen overflow-hidden bg-slate-950 px-4 py-4 text-white sm:px-6 sm:py-6">
+      {/* background glow */}
+      <div className="absolute inset-0">
+        <div className="absolute left-[-120px] top-[-120px] h-72 w-72 rounded-full bg-cyan-500/20 blur-3xl" />
+        <div className="absolute right-[-120px] top-32 h-80 w-80 rounded-full bg-blue-600/20 blur-3xl" />
+        <div className="absolute bottom-[-120px] left-1/2 h-80 w-80 -translate-x-1/2 rounded-full bg-indigo-500/20 blur-3xl" />
+      </div>
+
+      <div className="relative mx-auto max-w-6xl">
+        {/* top buttons */}
+        <div className="mb-5 flex items-center justify-between gap-3 sm:mb-6">
           <Link
             href="/shop"
-            className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition hover:border-gray-300 hover:text-black"
+            className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm font-medium text-slate-200 shadow-sm backdrop-blur transition hover:bg-white/15 hover:text-white"
           >
             <span>←</span>
             <span>Буцах</span>
@@ -63,62 +83,68 @@ export default function ProductDetailPage() {
 
           <Link
             href="/cart"
-            className="inline-flex items-center justify-center rounded-full bg-black px-4 py-2 text-sm font-semibold text-white shadow-md transition hover:opacity-90"
+            className="inline-flex items-center justify-center rounded-full bg-white px-4 py-2 text-sm font-bold text-slate-900 shadow-lg transition duration-200 hover:scale-[1.02]"
           >
             Сагс
           </Link>
         </div>
 
-        <div className="overflow-hidden rounded-[28px] border border-gray-100 bg-white shadow-[0_10px_40px_rgba(0,0,0,0.06)]">
+        {/* main card */}
+        <div className="overflow-hidden rounded-[32px] border border-white/10 bg-white/10 shadow-[0_20px_80px_rgba(0,0,0,0.35)] backdrop-blur-xl">
           <div className="grid md:grid-cols-2">
-            <div className="relative bg-gray-50">
-              <div className="aspect-square w-full overflow-hidden md:h-full">
+            {/* image */}
+            <div className="relative">
+              <div className="aspect-square overflow-hidden bg-slate-900/40 md:h-full">
                 <img
                   src={product.imageUrl}
                   alt={product.name}
-                  className="h-full w-full object-cover transition duration-500 hover:scale-105"
+                  className="h-full w-full object-cover transition duration-700 hover:scale-105"
                 />
               </div>
 
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
+
               <div className="absolute left-4 top-4">
-                <span className="rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-gray-700 shadow-sm backdrop-blur">
+                <span className="rounded-full border border-white/15 bg-white/15 px-3 py-1 text-xs font-semibold text-white backdrop-blur">
                   {product.categoryName}
                 </span>
               </div>
             </div>
 
-            <div className="flex flex-col p-4 sm:p-6 md:p-8">
-              <div className="mb-4 space-y-3 sm:mb-6">
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gray-400">
+            {/* content */}
+            <div className="flex flex-col p-5 sm:p-6 md:p-8">
+              <div className="mb-5 space-y-4">
+                <p className="text-xs font-semibold uppercase tracking-[0.28em] text-cyan-200">
                   Product Detail
                 </p>
 
-                <h1 className="text-2xl font-extrabold leading-tight text-gray-900 sm:text-3xl">
+                <h1 className="text-2xl font-black leading-tight text-white sm:text-4xl">
                   {product.name}
                 </h1>
 
-                <div className="flex items-end justify-between gap-3">
-                  <p className="text-2xl font-black text-black sm:text-3xl">
+                <div className="flex flex-wrap items-end justify-between gap-3">
+                  <p className="text-3xl font-black text-white sm:text-4xl">
                     ₮{product.price.toLocaleString()}
                   </p>
 
-                  <div className="rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold text-gray-700">
+                  <div className="rounded-full border border-white/10 bg-white/10 px-3 py-1.5 text-xs font-semibold text-slate-200 backdrop-blur">
                     Үлдэгдэл: {product.stock} ш
                   </div>
                 </div>
               </div>
 
-              <div className="mb-5 rounded-2xl bg-gray-50 p-4 sm:mb-6">
-                <p className="text-sm leading-6 text-gray-700">
+              <div className="mb-5 rounded-[24px] border border-white/10 bg-white/10 p-4 text-slate-200 backdrop-blur sm:mb-6 sm:p-5">
+                <p className="text-sm leading-7 text-slate-200">
                   {product.description}
                 </p>
               </div>
 
               <div className="mt-auto space-y-4">
-                <div className="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm">
-                  <p className="mb-3 text-sm font-semibold text-gray-900">
+                <div className="rounded-[24px] border border-white/10 bg-white/10 p-4 shadow-sm backdrop-blur">
+                  <p className="mb-3 text-sm font-semibold text-white">
                     Тоо ширхэг сонгох
                   </p>
+
                   <QuantitySelector
                     value={quantity}
                     onChange={setQuantity}
@@ -126,11 +152,35 @@ export default function ProductDetailPage() {
                   />
                 </div>
 
-                <div className="rounded-2xl bg-black p-3 shadow-lg">
+                <div className="rounded-[24px] border border-cyan-400/20 bg-gradient-to-r from-cyan-500 to-blue-600 p-3 shadow-[0_20px_40px_rgba(14,165,233,0.22)]">
                   <AddToCartButton product={product} quantity={quantity} />
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* extra info */}
+        <div className="mt-6 grid gap-4 md:grid-cols-3">
+          <div className="rounded-[24px] border border-white/10 bg-white/10 p-4 text-slate-200 backdrop-blur">
+            <p className="text-sm font-bold text-white">Хурдан хүргэлт</p>
+            <p className="mt-2 text-sm leading-6 text-slate-300">
+              Захиалга баталгаажсаны дараа барааг шуурхай боловсруулна.
+            </p>
+          </div>
+
+          <div className="rounded-[24px] border border-white/10 bg-white/10 p-4 text-slate-200 backdrop-blur">
+            <p className="text-sm font-bold text-white">Найдвартай захиалга</p>
+            <p className="mt-2 text-sm leading-6 text-slate-300">
+              Сагсанд нэмээд захиалгаа хялбараар үүсгэх боломжтой.
+            </p>
+          </div>
+
+          <div className="rounded-[24px] border border-white/10 bg-white/10 p-4 text-slate-200 backdrop-blur">
+            <p className="text-sm font-bold text-white">Чанартай бүтээгдэхүүн</p>
+            <p className="mt-2 text-sm leading-6 text-slate-300">
+              Сургалт болон спортод тохирсон хэрэгцээт бараанууд.
+            </p>
           </div>
         </div>
       </div>

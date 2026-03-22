@@ -45,45 +45,70 @@ export default function ShopPage() {
   }, [products, search]);
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-white via-gray-50 to-white pb-28 pt-4">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <div className="mb-5 rounded-[28px] bg-black px-5 py-5 text-white shadow-[0_12px_40px_rgba(0,0,0,0.18)] sm:px-6 sm:py-6">
-          <div className="flex items-start justify-between gap-3">
-            <div>
-              <p className="mb-1 text-xs font-semibold uppercase tracking-[0.25em] text-white/60">
-                Shop
+    <main className="relative min-h-screen overflow-hidden bg-slate-950 pb-28 pt-4 text-white">
+      {/* background glow */}
+      <div className="absolute inset-0">
+        <div className="absolute left-[-120px] top-[-100px] h-72 w-72 rounded-full bg-cyan-500/20 blur-3xl" />
+        <div className="absolute right-[-100px] top-24 h-80 w-80 rounded-full bg-blue-600/20 blur-3xl" />
+        <div className="absolute bottom-[-120px] left-1/2 h-80 w-80 -translate-x-1/2 rounded-full bg-indigo-500/20 blur-3xl" />
+      </div>
+
+      <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
+        {/* hero */}
+        <div className="mb-6 overflow-hidden rounded-[32px] border border-white/10 bg-white/10 p-5 shadow-[0_20px_80px_rgba(0,0,0,0.35)] backdrop-blur-xl sm:p-7">
+          <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
+            <div className="max-w-2xl">
+              <div className="inline-flex items-center rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.25em] text-cyan-200">
+                Volleyball Shop
+              </div>
+
+              {/* <h1 className="mt-4 text-3xl font-black tracking-tight text-white sm:text-5xl">
+                Дэлгүүр
+              </h1> */}
+
+              {/* <p className="mt-3 max-w-xl text-sm leading-7 text-slate-300 sm:text-base">
+                Өөрт хэрэгтэй бараагаа хурдан хайж, ангиллаар нь үзэж,
+                хялбараар захиалаарай.
               </p>
-              <h1 className="text-2xl font-black sm:text-3xl">Дэлгүүр</h1>
-              <p className="mt-2 text-sm text-white/70">
-                Өөрт хэрэгтэй бараагаа хурдан хайж, ангиллаар нь сонгоорой.
-              </p>
+
+              <div className="mt-5 flex flex-wrap gap-3 text-sm">
+                <div className="rounded-full bg-white/10 px-4 py-2 text-slate-200">
+                  {products.length} бараа
+                </div>
+                <div className="rounded-full bg-white/10 px-4 py-2 text-slate-200">
+                  {categories.length} ангилал
+                </div>
+              </div> */}
             </div>
 
-            <Link
+            {/* <Link
               href="/cart"
-              className="shrink-0 rounded-full bg-white px-4 py-2 text-sm font-bold text-black transition hover:scale-[1.02]"
+              className="inline-flex shrink-0 items-center justify-center rounded-2xl bg-white px-5 py-3 text-sm font-bold text-slate-900 shadow-lg transition duration-200 hover:scale-[1.02]"
             >
-              Сагс
-            </Link>
+              Сагс харах
+            </Link> */}
           </div>
         </div>
 
-        <div className="mb-6">
+        {/* search */}
+        <div className="mb-6 rounded-[28px] border border-white/10 bg-white/95 p-3 shadow-[0_16px_50px_rgba(0,0,0,0.18)]">
           <ShopSearch value={search} onChange={setSearch} />
         </div>
 
+        {/* categories */}
         <section
           id="categories"
-          className="mb-8 rounded-[24px] border border-gray-100 bg-white p-4 shadow-sm sm:p-5"
+          className="mb-8 rounded-[28px] border border-white/10 bg-white/95 p-4 text-slate-900 shadow-[0_16px_50px_rgba(0,0,0,0.18)] sm:p-5"
         >
           <div className="mb-4 flex items-center justify-between gap-3">
             <div>
-              <h2 className="text-lg font-bold text-gray-900">Ангилал</h2>
-              <p className="text-sm text-gray-500">
+              <h2 className="text-xl font-bold text-slate-900">Ангилал</h2>
+              <p className="mt-1 text-sm text-slate-500">
                 Бараагаа ангиллаар нь хурдан олоорой
               </p>
             </div>
-            <div className="rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold text-gray-600">
+
+            <div className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">
               {categories.length}
             </div>
           </div>
@@ -93,7 +118,7 @@ export default function ShopPage() {
               <Link
                 key={category._id}
                 href={`/shop/category/${category.slug}`}
-                className="whitespace-nowrap rounded-full border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm font-medium text-gray-700 transition hover:border-black hover:bg-black hover:text-white"
+                className="whitespace-nowrap rounded-full border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm font-semibold text-slate-700 transition duration-200 hover:border-cyan-500 hover:bg-cyan-500 hover:text-white"
               >
                 {category.name}
               </Link>
@@ -101,11 +126,12 @@ export default function ShopPage() {
           </div>
         </section>
 
-        <section>
-          <div className="mb-4 flex items-center justify-between gap-3">
+        {/* products */}
+        <section className="rounded-[28px] border border-white/10 bg-white/95 p-4 text-slate-900 shadow-[0_16px_50px_rgba(0,0,0,0.18)] sm:p-5">
+          <div className="mb-5 flex items-center justify-between gap-3">
             <div>
-              <h2 className="text-lg font-bold text-gray-900">Бүх бараа</h2>
-              <p className="text-sm text-gray-500">
+              <h2 className="text-xl font-bold text-slate-900">Бүх бараа</h2>
+              <p className="mt-1 text-sm text-slate-500">
                 {search.trim()
                   ? `“${search}” хайлтаар ${filtered.length} бараа олдлоо`
                   : `${products.length} бараа байна`}
@@ -114,11 +140,14 @@ export default function ShopPage() {
           </div>
 
           {filtered.length === 0 ? (
-            <div className="rounded-[24px] border border-dashed border-gray-200 bg-white px-6 py-14 text-center shadow-sm">
-              <p className="text-lg font-semibold text-gray-900">
+            <div className="rounded-[24px] border border-dashed border-slate-300 bg-slate-50 px-6 py-14 text-center">
+              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-slate-200 text-xl">
+                🔍
+              </div>
+              <p className="mt-4 text-lg font-bold text-slate-900">
                 Бараа олдсонгүй
               </p>
-              <p className="mt-2 text-sm text-gray-500">
+              <p className="mt-2 text-sm text-slate-500">
                 Өөр түлхүүр үг ашиглаад дахин хайж үзээрэй.
               </p>
             </div>
@@ -127,7 +156,7 @@ export default function ShopPage() {
               {filtered.map((product) => (
                 <div
                   key={product._id}
-                  className="rounded-[22px] border border-gray-100 bg-white p-2 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+                  className="group rounded-[24px] border border-slate-200 bg-white p-2 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(0,0,0,0.12)]"
                 >
                   <ProductCard product={product} />
                 </div>

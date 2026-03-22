@@ -23,9 +23,9 @@ export default function HomePage() {
         <LandingButtons />
 
         {/* small info */}
-        <p className="mt-4 text-sm text-slate-400">
+        {/* <p className="mt-4 text-sm text-slate-400">
           Сургалтанд бүртгүүлэх эсвэл дэлгүүрээс бараа захиалах боломжтой
-        </p>
+        </p> */}
       </div>
     </main>
   );
