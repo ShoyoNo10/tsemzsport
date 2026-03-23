@@ -7,6 +7,7 @@ import { Product } from "@/types/product";
 import ProductCard from "@/components/ProductCard";
 import ShopFooter from "@/components/ShopFooter";
 import ShopSearch from "@/components/ShopSearch";
+import Header from "@/components/Header";
 
 export default function ShopPage() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -45,6 +46,8 @@ export default function ShopPage() {
   }, [products, search]);
 
   return (
+    <>
+    <Header/>
     <main className="relative min-h-screen overflow-hidden bg-slate-950 pb-28 pt-4 text-white">
       {/* background glow */}
       <div className="absolute inset-0">
@@ -61,56 +64,31 @@ export default function ShopPage() {
               <div className="inline-flex items-center rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.25em] text-cyan-200">
                 Volleyball Shop
               </div>
-
-              {/* <h1 className="mt-4 text-3xl font-black tracking-tight text-white sm:text-5xl">
-                Дэлгүүр
-              </h1> */}
-
-              {/* <p className="mt-3 max-w-xl text-sm leading-7 text-slate-300 sm:text-base">
-                Өөрт хэрэгтэй бараагаа хурдан хайж, ангиллаар нь үзэж,
-                хялбараар захиалаарай.
-              </p>
-
-              <div className="mt-5 flex flex-wrap gap-3 text-sm">
-                <div className="rounded-full bg-white/10 px-4 py-2 text-slate-200">
-                  {products.length} бараа
-                </div>
-                <div className="rounded-full bg-white/10 px-4 py-2 text-slate-200">
-                  {categories.length} ангилал
-                </div>
-              </div> */}
             </div>
-
-            {/* <Link
-              href="/cart"
-              className="inline-flex shrink-0 items-center justify-center rounded-2xl bg-white px-5 py-3 text-sm font-bold text-slate-900 shadow-lg transition duration-200 hover:scale-[1.02]"
-            >
-              Сагс харах
-            </Link> */}
           </div>
         </div>
 
         {/* search */}
-        <div className="mb-6 rounded-[28px] border border-white/10 bg-white/95 p-3 shadow-[0_16px_50px_rgba(0,0,0,0.18)]">
+        <div className="mb-6 rounded-[28px] border border-white/10 bg-white/10 p-3 shadow-[0_16px_50px_rgba(0,0,0,0.18)]">
           <ShopSearch value={search} onChange={setSearch} />
         </div>
 
         {/* categories */}
         <section
           id="categories"
-          className="mb-8 rounded-[28px] border border-white/10 bg-white/95 p-4 text-slate-900 shadow-[0_16px_50px_rgba(0,0,0,0.18)] sm:p-5"
+          className="mb-8 rounded-[28px] border border-white/10 bg-white/10 text-left  backdrop-blur-xl p-4 text-white shadow-[0_16px_50px_rgba(0,0,0,0.18)] sm:p-5"
         >
           <div className="mb-4 flex items-center justify-between gap-3">
             <div>
-              <h2 className="text-xl font-bold text-slate-900">Ангилал</h2>
+              <h2 className="text-xl font-bold text-white">Ангилал</h2>
               <p className="mt-1 text-sm text-slate-500">
                 Бараагаа ангиллаар нь хурдан олоорой
               </p>
             </div>
 
-            <div className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">
+            {/* <div className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">
               {categories.length}
-            </div>
+            </div> */}
           </div>
 
           <div className="flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
@@ -127,10 +105,10 @@ export default function ShopPage() {
         </section>
 
         {/* products */}
-        <section className="rounded-[28px] border border-white/10 bg-white/95 p-4 text-slate-900 shadow-[0_16px_50px_rgba(0,0,0,0.18)] sm:p-5">
+        <section className="rounded-[28px] border border-white/10 bg-white/10 p-4 text-slate-900 shadow-[0_16px_50px_rgba(0,0,0,0.18)] sm:p-5">
           <div className="mb-5 flex items-center justify-between gap-3">
             <div>
-              <h2 className="text-xl font-bold text-slate-900">Бүх бараа</h2>
+              <h2 className="text-xl font-bold text-white">Бүх бараа</h2>
               <p className="mt-1 text-sm text-slate-500">
                 {search.trim()
                   ? `“${search}” хайлтаар ${filtered.length} бараа олдлоо`
@@ -156,7 +134,7 @@ export default function ShopPage() {
               {filtered.map((product) => (
                 <div
                   key={product._id}
-                  className="group rounded-[24px] border border-slate-200 bg-white p-2 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(0,0,0,0.12)]"
+                  className="group rounded-[24px] shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(0,0,0,0.12)]"
                 >
                   <ProductCard product={product} />
                 </div>
@@ -165,8 +143,8 @@ export default function ShopPage() {
           )}
         </section>
       </div>
-
       <ShopFooter />
     </main>
+    </>
   );
 }

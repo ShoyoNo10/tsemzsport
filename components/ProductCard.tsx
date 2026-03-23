@@ -11,10 +11,10 @@ export default function ProductCard({ product }: Props) {
   return (
     <Link
       href={`/shop/${product.slug}`}
-      className="group block overflow-hidden rounded-[22px] border border-white/10 bg-white/95 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(0,0,0,0.15)]"
+      className="group block overflow-hidden rounded-[22px] border border-white/10 bg-white/10 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(0,0,0,0.15)]"
     >
       {/* image */}
-      <div className="relative aspect-square overflow-hidden bg-slate-100">
+      <div className="relative aspect-square overflow-hidden bg-white/10">
         <img
           src={product.imageUrl}
           alt={product.name}
@@ -26,7 +26,7 @@ export default function ProductCard({ product }: Props) {
       </div>
 
       {/* content */}
-      <div className="space-y-2 p-3">
+      <div className="space-y-2 p-3 bg-white/90">
         <h3 className="line-clamp-2 text-sm font-semibold text-slate-900 transition group-hover:text-cyan-600">
           {product.name}
         </h3>

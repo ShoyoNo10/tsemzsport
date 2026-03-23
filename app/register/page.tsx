@@ -1,7 +1,10 @@
 import RegistrationForm from "@/components/RegistrationForm";
+import Header from "@/components/Header";
 
 export default function RegisterPage() {
   return (
+    <>
+    <Header/>
     <main className="relative min-h-screen overflow-hidden bg-slate-950">
       {/* background glow */}
       <div className="absolute inset-0">
@@ -29,5 +32,6 @@ export default function RegisterPage() {
         <RegistrationForm />
       </div>
     </main>
+    </>
   );
 }
