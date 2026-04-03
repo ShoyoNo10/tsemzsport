@@ -36,6 +36,11 @@ export const createClassOptionSchema = z.object({
   branchId: z.string().min(1, "Салбар сонгоно уу"),
   scheduleTemplateId: z.string().min(1, "Хуваарь сонгоно уу"),
   description: z.string().min(1, "Тайлбар шаардлагатай"),
+
+// added
+  capacity: z.number().int().min(0, "Суудлын тоо буруу байна"),
+  isOpen: z.boolean(),
+
   status: z.enum(["active", "inactive"]),
 });
 
@@ -52,6 +57,8 @@ export const createRegistrationSchema = z.object({
 });
 
 export type CreateBranchInput = z.infer<typeof createBranchSchema>;
-export type CreateScheduleTemplateInput = z.infer<typeof createScheduleTemplateSchema>;
+export type CreateScheduleTemplateInput = z.infer<
+  typeof createScheduleTemplateSchema
+>;
 export type CreateClassOptionInput = z.infer<typeof createClassOptionSchema>;
 export type CreateRegistrationInput = z.infer<typeof createRegistrationSchema>;

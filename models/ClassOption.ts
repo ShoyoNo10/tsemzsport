@@ -33,6 +33,21 @@ const classOptionSchema = new Schema(
       trim: true,
       default: "",
     },
+
+// addedd
+    capacity: {
+      type: Number,
+      required: true,
+      min: 0,
+      default: 0,
+    },
+    isOpen: {
+      type: Boolean,
+      required: true,
+      default: true,
+    },
+
+
     status: {
       type: String,
       enum: ["active", "inactive"],
@@ -42,10 +57,11 @@ const classOptionSchema = new Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 export type ClassOptionDocument = InferSchemaType<typeof classOptionSchema>;
 
 export const ClassOptionModel: Model<ClassOptionDocument> =
-  models.ClassOption || model<ClassOptionDocument>("ClassOption", classOptionSchema);
+  models.ClassOption ||
+  model<ClassOptionDocument>("ClassOption", classOptionSchema);
