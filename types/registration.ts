@@ -40,6 +40,13 @@
 //   updatedAt: string;
 // }
 
+export interface QPayUrlItem {
+  name: string;
+  description: string;
+  logo: string;
+  link: string;
+}
+
 
 export interface RegistrationDto {
   _id: string;
