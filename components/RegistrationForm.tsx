@@ -233,9 +233,6 @@ export default function RegistrationForm() {
             <h2 className="text-2xl font-bold text-slate-900">
               Бүртгэлийн мэдээлэл
             </h2>
-            <p className="mt-2 text-sm text-slate-500">
-              Эхлээд салбараа сонгоод, дараа нь popup дээр анги болон сарыг сонгоно уу.
-            </p>
           </div>
 
           <div className="mb-6">
@@ -275,10 +272,6 @@ export default function RegistrationForm() {
                 );
               })}
             </div>
-          </div>
-
-          <div className="rounded-[24px] border border-dashed border-white/20 bg-white/5 p-6 text-center text-slate-600">
-            Салбар дээр дармагц бүртгэлийн form popup хэлбэрээр нээгдэнэ.
           </div>
         </div>
 

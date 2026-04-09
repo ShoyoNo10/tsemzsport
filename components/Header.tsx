@@ -19,17 +19,19 @@ export default function Header() {
           href="/"
           className="flex items-center gap-2 rounded-2xl px-2 py-1 transition hover:bg-white/5"
         >
-          <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-500 to-blue-600 text-lg shadow-[0_10px_30px_rgba(14,165,233,0.35)]">
+          {/* <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-500 to-blue-600 text-lg shadow-[0_10px_30px_rgba(14,165,233,0.35)]">
             🏐
-          </div>
+          </div> */}
+          <img
+            src="/logo1.jpg"
+            alt="TsemzSport"
+            className="h-8 w-8 rounded-full"
+          />
 
           <div className="leading-tight">
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-cyan-200">
               Tsemz
             </p>
-            <h1 className="text-base font-black text-white sm:text-lg">
-              TsemzSport
-            </h1>
           </div>
         </Link>
 

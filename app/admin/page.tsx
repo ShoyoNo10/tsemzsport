@@ -29,21 +29,25 @@ export default function AdminPage() {
       return;
     }
 
-    const [branchesResponse, schedulesResponse, classOptionsResponse, registrationsResponse] =
-      await Promise.all([
-        fetch("/api/admin/branches", {
-          headers: { "x-admin-secret": adminSecret },
-        }),
-        fetch("/api/admin/schedules", {
-          headers: { "x-admin-secret": adminSecret },
-        }),
-        fetch("/api/admin/class-options", {
-          headers: { "x-admin-secret": adminSecret },
-        }),
-        fetch("/api/admin/registrations", {
-          headers: { "x-admin-secret": adminSecret },
-        }),
-      ]);
+    const [
+      branchesResponse,
+      schedulesResponse,
+      classOptionsResponse,
+      registrationsResponse,
+    ] = await Promise.all([
+      fetch("/api/admin/branches", {
+        headers: { "x-admin-secret": adminSecret },
+      }),
+      fetch("/api/admin/schedules", {
+        headers: { "x-admin-secret": adminSecret },
+      }),
+      fetch("/api/admin/class-options", {
+        headers: { "x-admin-secret": adminSecret },
+      }),
+      fetch("/api/admin/registrations", {
+        headers: { "x-admin-secret": adminSecret },
+      }),
+    ]);
 
     if (
       !branchesResponse.ok ||
@@ -57,9 +61,12 @@ export default function AdminPage() {
     }
 
     const branchesData = (await branchesResponse.json()) as BranchDto[];
-    const schedulesData = (await schedulesResponse.json()) as ScheduleTemplateDto[];
-    const classOptionsData = (await classOptionsResponse.json()) as ClassOptionDto[];
-    const registrationsData = (await registrationsResponse.json()) as RegistrationDto[];
+    const schedulesData =
+      (await schedulesResponse.json()) as ScheduleTemplateDto[];
+    const classOptionsData =
+      (await classOptionsResponse.json()) as ClassOptionDto[];
+    const registrationsData =
+      (await registrationsResponse.json()) as RegistrationDto[];
 
     setBranches(branchesData);
     setSchedules(schedulesData);
@@ -92,7 +99,9 @@ export default function AdminPage() {
             Нэвтрэх
           </button>
 
-          {message ? <p className="mt-3 text-sm text-red-600">{message}</p> : null}
+          {message ? (
+            <p className="mt-3 text-sm text-red-600">{message}</p>
+          ) : null}
         </div>
       </main>
     );
@@ -136,9 +145,13 @@ export default function AdminPage() {
           />
         </div>
 
-        <AdminRegistrations registrations={registrations} />
+        <AdminRegistrations
+          registrations={registrations}
+          adminSecret={adminSecret}
+          onDeleted={fetchAll}
+        />
 
-        <section className="rounded-2xl bg-white p-5 shadow">
+        {/* <section className="rounded-2xl bg-white p-5 shadow">
           <h2 className="text-xl font-semibold text-slate-900">Ангиуд</h2>
 
           <div className="mt-4 grid gap-3">
@@ -153,7 +166,7 @@ export default function AdminPage() {
               </div>
             ))}
           </div>
-        </section>
+        </section> */}
 
         <div className="grid gap-6">
           <AdminCategories adminSecret={adminSecret} />
