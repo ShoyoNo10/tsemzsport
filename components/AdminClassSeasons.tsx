@@ -259,6 +259,7 @@ export default function AdminClassSeasons({
             className="rounded-xl border px-4 py-3"
           />
 
+<div>Нийт суудал</div>
           <input
             type="number"
             value={capacity}

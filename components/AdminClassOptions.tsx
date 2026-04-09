@@ -49,7 +49,8 @@ export default function AdminClassOptions({
   const [editAgeRangeLabel, setEditAgeRangeLabel] = useState<string>("");
   const [editPrice, setEditPrice] = useState<number>(0);
   const [editBranchId, setEditBranchId] = useState<string>("");
-  const [editScheduleTemplateId, setEditScheduleTemplateId] = useState<string>("");
+  const [editScheduleTemplateId, setEditScheduleTemplateId] =
+    useState<string>("");
   const [editDescription, setEditDescription] = useState<string>("");
   const [editIsOpen, setEditIsOpen] = useState<boolean>(true);
   const [editStatus, setEditStatus] = useState<"active" | "inactive">("active");
@@ -82,7 +83,9 @@ export default function AdminClassOptions({
 
       if (!response.ok) {
         setMessage(
-          "message" in result ? result.message ?? "Алдаа гарлаа" : "Алдаа гарлаа"
+          "message" in result
+            ? (result.message ?? "Алдаа гарлаа")
+            : "Алдаа гарлаа",
         );
         setLoading(false);
         return;
@@ -276,6 +279,7 @@ export default function AdminClassOptions({
             className="rounded-xl border px-4 py-3"
           />
 
+          <div>Үнэ</div>
           <input
             type="number"
             value={price}
@@ -294,7 +298,9 @@ export default function AdminClassOptions({
           </select>
 
           <div className="grid gap-3">
-            <p className="text-sm font-semibold text-slate-700">Салбар сонгох</p>
+            <p className="text-sm font-semibold text-slate-700">
+              Салбар сонгох
+            </p>
 
             <div className="grid gap-3 md:grid-cols-2">
               {branches.map((branch) => {
@@ -320,8 +326,12 @@ export default function AdminClassOptions({
                     </div>
 
                     <div className="p-4">
-                      <p className="font-semibold text-slate-900">{branch.name}</p>
-                      <p className="mt-1 text-sm text-slate-500">{branch.address}</p>
+                      <p className="font-semibold text-slate-900">
+                        {branch.name}
+                      </p>
+                      <p className="mt-1 text-sm text-slate-500">
+                        {branch.address}
+                      </p>
                     </div>
                   </button>
                 );
@@ -379,7 +389,9 @@ export default function AdminClassOptions({
       </div>
 
       <div className="mt-6">
-        <h3 className="text-lg font-semibold text-slate-900">Нэмэгдсэн ангиуд</h3>
+        <h3 className="text-lg font-semibold text-slate-900">
+          Нэмэгдсэн ангиуд
+        </h3>
 
         {loading ? (
           <p className="mt-3 text-sm text-slate-500">Уншиж байна...</p>
@@ -416,7 +428,9 @@ export default function AdminClassOptions({
                       <input
                         type="number"
                         value={editPrice}
-                        onChange={(event) => setEditPrice(Number(event.target.value))}
+                        onChange={(event) =>
+                          setEditPrice(Number(event.target.value))
+                        }
                         placeholder="Үнэ"
                         className="rounded-xl border px-4 py-3"
                       />
@@ -500,7 +514,9 @@ export default function AdminClassOptions({
 
                       <textarea
                         value={editDescription}
-                        onChange={(event) => setEditDescription(event.target.value)}
+                        onChange={(event) =>
+                          setEditDescription(event.target.value)
+                        }
                         placeholder="Тайлбар"
                         rows={3}
                         className="rounded-xl border px-4 py-3"
@@ -510,7 +526,7 @@ export default function AdminClassOptions({
                         value={editStatus}
                         onChange={(event) =>
                           setEditStatus(
-                            event.target.value as "active" | "inactive"
+                            event.target.value as "active" | "inactive",
                           )
                         }
                         className="rounded-xl border px-4 py-3"
@@ -549,7 +565,9 @@ export default function AdminClassOptions({
                             <p>Нас: {item.ageRangeLabel}</p>
                             <p>Үнэ: {item.price.toLocaleString()}₮</p>
                             <p>
-                              Салбар: {branchNameMap.get(item.branchId) ?? "Тодорхойгүй"}
+                              Салбар:{" "}
+                              {branchNameMap.get(item.branchId) ??
+                                "Тодорхойгүй"}
                             </p>
                             <p>
                               Хуваарь:{" "}
@@ -592,7 +610,9 @@ export default function AdminClassOptions({
           </div>
         )}
 
-        {message ? <p className="mt-4 text-sm text-slate-600">{message}</p> : null}
+        {message ? (
+          <p className="mt-4 text-sm text-slate-600">{message}</p>
+        ) : null}
       </div>
     </section>
   );
