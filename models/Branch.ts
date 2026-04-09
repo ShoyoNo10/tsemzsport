@@ -1,6 +1,6 @@
-import { InferSchemaType, Model, Schema, model, models } from "mongoose";
+import { Schema, model, models } from "mongoose";
 
-const branchSchema = new Schema(
+const BranchSchema = new Schema(
   {
     name: {
       type: String,
@@ -11,6 +11,16 @@ const branchSchema = new Schema(
       type: String,
       required: true,
       trim: true,
+    },
+    imageUrl: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    description: {
+      type: String,
+      trim: true,
+      default: "",
     },
     status: {
       type: String,
@@ -24,6 +34,4 @@ const branchSchema = new Schema(
   }
 );
 
-export type BranchDocument = InferSchemaType<typeof branchSchema>;
-export const BranchModel: Model<BranchDocument> =
-  models.Branch || model<BranchDocument>("Branch", branchSchema);
+export const BranchModel = models.Branch || model("Branch", BranchSchema);

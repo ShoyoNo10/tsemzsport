@@ -1,6 +1,73 @@
-import { InferSchemaType, Model, Schema, model, models } from "mongoose";
+// import { Schema, model, models, Types } from "mongoose";
 
-const classOptionSchema = new Schema(
+// const ClassOptionSchema = new Schema(
+//   {
+//     title: {
+//       type: String,
+//       required: true,
+//       trim: true,
+//     },
+//     ageRangeLabel: {
+//       type: String,
+//       required: true,
+//       trim: true,
+//     },
+//     seasonLabel: {
+//       type: String,
+//       required: true,
+//       trim: true,
+//     },
+//     price: {
+//       type: Number,
+//       required: true,
+//       min: 0,
+//     },
+//     branchId: {
+//       type: Types.ObjectId,
+//       ref: "Branch",
+//       required: true,
+//     },
+//     scheduleTemplateId: {
+//       type: Types.ObjectId,
+//       ref: "ScheduleTemplate",
+//       required: true,
+//     },
+//     description: {
+//       type: String,
+//       required: true,
+//       trim: true,
+//     },
+//     capacity: {
+//       type: Number,
+//       required: true,
+//       min: 0,
+//       default: 20,
+//     },
+//     isOpen: {
+//       type: Boolean,
+//       required: true,
+//       default: true,
+//     },
+//     status: {
+//       type: String,
+//       enum: ["active", "inactive"],
+//       default: "active",
+//       required: true,
+//     },
+//   },
+//   {
+//     timestamps: true,
+//   }
+// );
+
+// export const ClassOptionModel =
+//   models.ClassOption || model("ClassOption", ClassOptionSchema);
+
+
+
+import { Schema, model, models, Types } from "mongoose";
+
+const ClassOptionSchema = new Schema(
   {
     title: {
       type: String,
@@ -18,12 +85,12 @@ const classOptionSchema = new Schema(
       min: 0,
     },
     branchId: {
-      type: Schema.Types.ObjectId,
+      type: Types.ObjectId,
       ref: "Branch",
       required: true,
     },
     scheduleTemplateId: {
-      type: Schema.Types.ObjectId,
+      type: Types.ObjectId,
       ref: "ScheduleTemplate",
       required: true,
     },
@@ -31,23 +98,12 @@ const classOptionSchema = new Schema(
       type: String,
       required: true,
       trim: true,
-      default: "",
-    },
-
-// addedd
-    capacity: {
-      type: Number,
-      required: true,
-      min: 0,
-      default: 0,
     },
     isOpen: {
       type: Boolean,
       required: true,
       default: true,
     },
-
-
     status: {
       type: String,
       enum: ["active", "inactive"],
@@ -57,11 +113,8 @@ const classOptionSchema = new Schema(
   },
   {
     timestamps: true,
-  },
+  }
 );
 
-export type ClassOptionDocument = InferSchemaType<typeof classOptionSchema>;
-
-export const ClassOptionModel: Model<ClassOptionDocument> =
-  models.ClassOption ||
-  model<ClassOptionDocument>("ClassOption", classOptionSchema);
+export const ClassOptionModel =
+  models.ClassOption || model("ClassOption", ClassOptionSchema);

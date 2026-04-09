@@ -3,6 +3,7 @@
 import { useState } from "react";
 import AdminBranches from "@/components/AdminBranches";
 import AdminClassOptions from "@/components/AdminClassOptions";
+import AdminClassSeasons from "@/components/AdminClassSeasons";
 import AdminRegistrations from "@/components/AdminRegistrations";
 import AdminSchedules from "@/components/AdminSchedules";
 import AdminCategories from "@/components/AdminCategories";
@@ -123,6 +124,14 @@ export default function AdminPage() {
             adminSecret={adminSecret}
             branches={branches}
             schedules={schedules}
+            onCreated={fetchAll}
+          />
+        </div>
+
+        <div className="grid gap-6 lg:grid-cols-2 text-black">
+          <AdminClassSeasons
+            adminSecret={adminSecret}
+            classOptions={classOptions}
             onCreated={fetchAll}
           />
         </div>

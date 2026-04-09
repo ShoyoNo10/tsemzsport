@@ -13,6 +13,8 @@ export default function AdminBranches({
 }: AdminBranchesProps) {
   const [name, setName] = useState<string>("");
   const [address, setAddress] = useState<string>("");
+  const [imageUrl, setImageUrl] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
   const [status, setStatus] = useState<"active" | "inactive">("active");
   const [message, setMessage] = useState<string>("");
 
@@ -28,6 +30,8 @@ export default function AdminBranches({
       body: JSON.stringify({
         name,
         address,
+        imageUrl,
+        description,
         status,
       }),
     });
@@ -41,6 +45,8 @@ export default function AdminBranches({
 
     setName("");
     setAddress("");
+    setImageUrl("");
+    setDescription("");
     setStatus("active");
     setMessage("Салбар амжилттай нэмэгдлээ");
     await onCreated();
@@ -57,12 +63,29 @@ export default function AdminBranches({
           placeholder="Салбарын нэр"
           className="rounded-xl border px-4 py-3"
         />
+
         <input
           value={address}
           onChange={(event) => setAddress(event.target.value)}
           placeholder="Хаяг"
           className="rounded-xl border px-4 py-3"
         />
+
+        <input
+          value={imageUrl}
+          onChange={(event) => setImageUrl(event.target.value)}
+          placeholder="Зургийн URL"
+          className="rounded-xl border px-4 py-3"
+        />
+
+        <textarea
+          value={description}
+          onChange={(event) => setDescription(event.target.value)}
+          placeholder="Салбарын тайлбар"
+          rows={3}
+          className="rounded-xl border px-4 py-3"
+        />
+
         <select
           value={status}
           onChange={(event) =>

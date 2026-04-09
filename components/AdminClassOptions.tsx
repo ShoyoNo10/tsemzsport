@@ -16,15 +16,20 @@
 //   branches,
 //   schedules,
 //   onCreated,
-// }: AdminClassOptionsProps){
+// }: AdminClassOptionsProps) {
 //   const [title, setTitle] = useState<string>("");
 //   const [ageRangeLabel, setAgeRangeLabel] = useState<string>("");
+//   const [seasonLabel, setSeasonLabel] = useState<string>("");
 //   const [price, setPrice] = useState<number>(0);
 //   const [branchId, setBranchId] = useState<string>("");
 //   const [scheduleTemplateId, setScheduleTemplateId] = useState<string>("");
 //   const [description, setDescription] = useState<string>("");
+//   const [capacity, setCapacity] = useState<number>(20);
+//   const [isOpen, setIsOpen] = useState<boolean>(true);
 //   const [status, setStatus] = useState<"active" | "inactive">("active");
 //   const [message, setMessage] = useState<string>("");
+
+//   const selectedBranch = branches.find((item) => item._id === branchId) ?? null;
 
 //   const handleCreate = async (): Promise<void> => {
 //     setMessage("");
@@ -38,10 +43,13 @@
 //       body: JSON.stringify({
 //         title,
 //         ageRangeLabel,
+//         seasonLabel,
 //         price,
 //         branchId,
 //         scheduleTemplateId,
 //         description,
+//         capacity,
+//         isOpen,
 //         status,
 //       }),
 //     });
@@ -55,10 +63,13 @@
 
 //     setTitle("");
 //     setAgeRangeLabel("");
+//     setSeasonLabel("");
 //     setPrice(0);
 //     setBranchId("");
 //     setScheduleTemplateId("");
 //     setDescription("");
+//     setCapacity(20);
+//     setIsOpen(true);
 //     setStatus("active");
 //     setMessage("Анги амжилттай нэмэгдлээ");
 //     await onCreated();
@@ -79,7 +90,14 @@
 //         <input
 //           value={ageRangeLabel}
 //           onChange={(event) => setAgeRangeLabel(event.target.value)}
-//           placeholder="Жишээ: 13-15 нас"
+//           placeholder="Жишээ: 9-12 нас"
+//           className="rounded-xl border px-4 py-3"
+//         />
+
+//         <input
+//           value={seasonLabel}
+//           onChange={(event) => setSeasonLabel(event.target.value)}
+//           placeholder="Жишээ: 4-5 сар, 7-8 сар"
 //           className="rounded-xl border px-4 py-3"
 //         />
 
@@ -91,18 +109,64 @@
 //           className="rounded-xl border px-4 py-3"
 //         />
 
+//         <input
+//           type="number"
+//           value={capacity}
+//           onChange={(event) => setCapacity(Number(event.target.value))}
+//           placeholder="Нийт суудлын тоо"
+//           className="rounded-xl border px-4 py-3"
+//         />
+
 //         <select
-//           value={branchId}
-//           onChange={(event) => setBranchId(event.target.value)}
+//           value={isOpen ? "open" : "closed"}
+//           onChange={(event) => setIsOpen(event.target.value === "open")}
 //           className="rounded-xl border px-4 py-3"
 //         >
-//           <option value="">Салбар сонгох</option>
-//           {branches.map((branch) => (
-//             <option key={branch._id} value={branch._id}>
-//               {branch.name}
-//             </option>
-//           ))}
+//           <option value="open">Бүртгэл нээлттэй</option>
+//           <option value="closed">Бүртгэл хаалттай</option>
 //         </select>
+
+//         <div className="grid gap-3">
+//           <p className="text-sm font-semibold text-slate-700">Салбар сонгох</p>
+
+//           <div className="grid gap-3 md:grid-cols-2">
+//             {branches.map((branch) => {
+//               const isSelected = branchId === branch._id;
+
+//               return (
+//                 <button
+//                   key={branch._id}
+//                   type="button"
+//                   onClick={() => setBranchId(branch._id)}
+//                   className={`overflow-hidden rounded-2xl border text-left transition ${
+//                     isSelected
+//                       ? "border-blue-600 ring-2 ring-blue-200"
+//                       : "border-slate-200 hover:border-slate-300"
+//                   }`}
+//                 >
+//                   <div className="aspect-[16/10] bg-slate-100">
+//                     <img
+//                       src={branch.imageUrl}
+//                       alt={branch.name}
+//                       className="h-full w-full object-cover"
+//                     />
+//                   </div>
+
+//                   <div className="p-4">
+//                     <p className="font-semibold text-slate-900">{branch.name}</p>
+//                     <p className="mt-1 text-sm text-slate-500">{branch.address}</p>
+//                   </div>
+//                 </button>
+//               );
+//             })}
+//           </div>
+//         </div>
+
+//         {selectedBranch ? (
+//           <div className="rounded-xl bg-slate-50 p-3 text-sm text-slate-700">
+//             Сонгосон салбар: <span className="font-semibold">{selectedBranch.name}</span>
+//           </div>
+//         ) : null}
 
 //         <select
 //           value={scheduleTemplateId}
@@ -152,10 +216,6 @@
 
 
 
-
-
-
-
 "use client";
 
 import { useState } from "react";
@@ -181,10 +241,11 @@ export default function AdminClassOptions({
   const [branchId, setBranchId] = useState<string>("");
   const [scheduleTemplateId, setScheduleTemplateId] = useState<string>("");
   const [description, setDescription] = useState<string>("");
-  const [capacity, setCapacity] = useState<number>(20);
   const [isOpen, setIsOpen] = useState<boolean>(true);
   const [status, setStatus] = useState<"active" | "inactive">("active");
   const [message, setMessage] = useState<string>("");
+
+  const selectedBranch = branches.find((item) => item._id === branchId) ?? null;
 
   const handleCreate = async (): Promise<void> => {
     setMessage("");
@@ -202,7 +263,6 @@ export default function AdminClassOptions({
         branchId,
         scheduleTemplateId,
         description,
-        capacity,
         isOpen,
         status,
       }),
@@ -221,7 +281,6 @@ export default function AdminClassOptions({
     setBranchId("");
     setScheduleTemplateId("");
     setDescription("");
-    setCapacity(20);
     setIsOpen(true);
     setStatus("active");
     setMessage("Анги амжилттай нэмэгдлээ");
@@ -243,7 +302,7 @@ export default function AdminClassOptions({
         <input
           value={ageRangeLabel}
           onChange={(event) => setAgeRangeLabel(event.target.value)}
-          placeholder="Жишээ: 13-15 нас"
+          placeholder="Жишээ: 9-12 нас"
           className="rounded-xl border px-4 py-3"
         />
 
@@ -252,14 +311,6 @@ export default function AdminClassOptions({
           value={price}
           onChange={(event) => setPrice(Number(event.target.value))}
           placeholder="Үнэ"
-          className="rounded-xl border px-4 py-3"
-        />
-
-        <input
-          type="number"
-          value={capacity}
-          onChange={(event) => setCapacity(Number(event.target.value))}
-          placeholder="Нийт суудлын тоо"
           className="rounded-xl border px-4 py-3"
         />
 
@@ -272,18 +323,47 @@ export default function AdminClassOptions({
           <option value="closed">Бүртгэл хаалттай</option>
         </select>
 
-        <select
-          value={branchId}
-          onChange={(event) => setBranchId(event.target.value)}
-          className="rounded-xl border px-4 py-3"
-        >
-          <option value="">Салбар сонгох</option>
-          {branches.map((branch) => (
-            <option key={branch._id} value={branch._id}>
-              {branch.name}
-            </option>
-          ))}
-        </select>
+        <div className="grid gap-3">
+          <p className="text-sm font-semibold text-slate-700">Салбар сонгох</p>
+
+          <div className="grid gap-3 md:grid-cols-2">
+            {branches.map((branch) => {
+              const isSelected = branchId === branch._id;
+
+              return (
+                <button
+                  key={branch._id}
+                  type="button"
+                  onClick={() => setBranchId(branch._id)}
+                  className={`overflow-hidden rounded-2xl border text-left transition ${
+                    isSelected
+                      ? "border-blue-600 ring-2 ring-blue-200"
+                      : "border-slate-200 hover:border-slate-300"
+                  }`}
+                >
+                  <div className="aspect-[16/10] bg-slate-100">
+                    <img
+                      src={branch.imageUrl}
+                      alt={branch.name}
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+
+                  <div className="p-4">
+                    <p className="font-semibold text-slate-900">{branch.name}</p>
+                    <p className="mt-1 text-sm text-slate-500">{branch.address}</p>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {selectedBranch ? (
+          <div className="rounded-xl bg-slate-50 p-3 text-sm text-slate-700">
+            Сонгосон салбар: <span className="font-semibold">{selectedBranch.name}</span>
+          </div>
+        ) : null}
 
         <select
           value={scheduleTemplateId}
