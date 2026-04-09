@@ -115,41 +115,8 @@ export default function PaymentClient({
         <p className="mt-2 text-sm text-slate-600">
           Төлөв: <span className="font-semibold">{registration.paymentStatus}</span>
         </p>
-
-        {registration.qpayQrImage ? (
-          <div className="mt-6 flex justify-center">
-            <img
-              src={registration.qpayQrImage}
-              alt="QPay QR"
-              className="h-72 w-72 rounded-xl border object-contain"
-            />
-          </div>
-        ) : null}
-
         <div className="mt-6 space-y-3">
-          {registration.qpayShortUrl ? (
-            <a
-              href={registration.qpayShortUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="block w-full rounded-xl bg-blue-600 px-6 py-4 text-center font-semibold text-white"
-            >
-              QPay линкээр төлөх
-            </a>
-          ) : null}
-
-          {registration.qpayPaymentUrl ? (
-            <a
-              href={registration.qpayPaymentUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="block w-full rounded-xl bg-emerald-600 px-6 py-4 text-center font-semibold text-white"
-            >
-              Аппаар төлөх
-            </a>
-          ) : null}
-
-          <button
+           <button
             type="button"
             onClick={() => void checkPayment()}
             disabled={checking}
