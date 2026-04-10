@@ -60,11 +60,10 @@ export default function CartList() {
 
   return (
     <div className="grid gap-5 lg:grid-cols-[1.3fr_0.7fr]">
-      {/* items */}
       <div className="space-y-4">
         {items.map((item) => (
           <div
-            key={item.productId}
+            key={item.cartKey}
             className="rounded-[28px] border border-white/10 bg-white/95 p-4 text-slate-900 shadow-[0_16px_50px_rgba(0,0,0,0.18)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(0,0,0,0.12)] sm:p-5"
           >
             <div className="flex gap-4">
@@ -86,6 +85,10 @@ export default function CartList() {
                   </Link>
 
                   <p className="mt-2 text-sm font-medium text-slate-500">
+                    Size: {item.size}
+                  </p>
+
+                  <p className="mt-1 text-sm font-medium text-slate-500">
                     Нэгж үнэ
                   </p>
                   <p className="text-base font-extrabold text-slate-900">
@@ -101,7 +104,7 @@ export default function CartList() {
                     <QuantitySelector
                       value={item.quantity}
                       max={item.stock}
-                      onChange={(value) => updateCartQuantity(item.productId, value)}
+                      onChange={(value) => updateCartQuantity(item.cartKey, value)}
                     />
                   </div>
 
@@ -117,7 +120,7 @@ export default function CartList() {
 
                     <button
                       type="button"
-                      onClick={() => removeFromCart(item.productId)}
+                      onClick={() => removeFromCart(item.cartKey)}
                       className="rounded-xl bg-red-50 px-3 py-2 text-sm font-semibold text-red-600 transition hover:bg-red-100"
                     >
                       Устгах
@@ -130,7 +133,6 @@ export default function CartList() {
         ))}
       </div>
 
-      {/* summary */}
       <div className="h-fit rounded-[28px] border border-white/10 bg-white/95 p-5 text-slate-900 shadow-[0_16px_50px_rgba(0,0,0,0.18)] lg:sticky lg:top-6">
         <h2 className="text-xl font-bold text-slate-900">Захиалгын мэдээлэл</h2>
         <p className="mt-1 text-sm text-slate-500">
@@ -139,15 +141,13 @@ export default function CartList() {
 
         <div className="mt-5 space-y-3 rounded-[24px] bg-slate-50 p-4">
           <div className="flex items-center justify-between text-sm text-slate-600">
-            <span>Барааны тоо</span>
+            <span>Барааны төрөл</span>
             <span>{items.length}</span>
           </div>
 
           <div className="flex items-center justify-between text-sm text-slate-600">
             <span>Нийт ширхэг</span>
-            <span>
-              {items.reduce((sum, item) => sum + item.quantity, 0)}
-            </span>
+            <span>{items.reduce((sum, item) => sum + item.quantity, 0)}</span>
           </div>
 
           <div className="h-px bg-slate-200" />

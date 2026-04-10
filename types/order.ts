@@ -6,6 +6,7 @@ export interface OrderItem {
   productSlug: string;
   imageUrl: string;
   price: number;
+  size: string;
   quantity: number;
   lineTotal: number;
 }
@@ -46,6 +47,7 @@ export interface CreateOrderPayload {
   address: string;
   items: Array<{
     productId: string;
+    size: string;
     quantity: number;
   }>;
 }

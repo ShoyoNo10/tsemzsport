@@ -4,15 +4,20 @@ import { connectDb } from "@/lib/db";
 import Product from "@/models/Product";
 import Category from "@/models/Category";
 
+interface ProductLeanSize {
+  size: string;
+  stock: number;
+}
+
 interface ProductLean {
   _id: mongoose.Types.ObjectId;
   name: string;
   slug: string;
   description: string;
   price: number;
-  stock: number;
   imageUrl: string;
   categoryId: mongoose.Types.ObjectId;
+  sizeVariants: ProductLeanSize[];
   isActive: boolean;
 }
 
@@ -20,6 +25,10 @@ interface CategoryLean {
   _id: mongoose.Types.ObjectId;
   name: string;
   slug: string;
+}
+
+function getTotalStock(sizeVariants: ProductLeanSize[]): number {
+  return sizeVariants.reduce((sum, item) => sum + item.stock, 0);
 }
 
 export async function GET(
@@ -48,11 +57,15 @@ export async function GET(
     slug: product.slug,
     description: product.description,
     price: product.price,
-    stock: product.stock,
+    stock: getTotalStock(product.sizeVariants),
     imageUrl: product.imageUrl,
     categoryId: product.categoryId.toString(),
     categoryName: category?.name || "",
     categorySlug: category?.slug || "",
+    sizeVariants: product.sizeVariants.map((item) => ({
+      size: item.size,
+      stock: item.stock,
+    })),
     isActive: product.isActive,
   });
 }

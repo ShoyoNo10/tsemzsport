@@ -1,6 +1,7 @@
 import { Product } from "@/types/product";
 
 export interface CartItem {
+  cartKey: string;
   productId: string;
   slug: string;
   name: string;
@@ -8,6 +9,7 @@ export interface CartItem {
   price: number;
   quantity: number;
   stock: number;
+  size: string;
 }
 
 const CART_KEY = "shop-cart";
@@ -40,39 +42,53 @@ export function saveCart(items: CartItem[]): void {
   window.dispatchEvent(new Event("cart-updated"));
 }
 
-export function addToCart(product: Product, quantity: number): void {
+export function addToCart(
+  product: Product,
+  size: string,
+  quantity: number
+): void {
+  const variant = product.sizeVariants.find((item) => item.size === size);
+
+  if (!variant || variant.stock <= 0) {
+    return;
+  }
+
   const current = getCart();
-  const existing = current.find((item) => item.productId === product._id);
+  const cartKey = `${product._id}-${size}`;
+  const existing = current.find((item) => item.cartKey === cartKey);
 
   if (existing) {
-    existing.quantity = Math.min(existing.quantity + quantity, product.stock);
+    existing.quantity = Math.min(existing.quantity + quantity, variant.stock);
+    existing.stock = variant.stock;
     saveCart([...current]);
     return;
   }
 
   current.push({
+    cartKey,
     productId: product._id,
     slug: product.slug,
     name: product.name,
     imageUrl: product.imageUrl,
     price: product.price,
-    quantity: Math.min(quantity, product.stock),
-    stock: product.stock,
+    quantity: Math.min(quantity, variant.stock),
+    stock: variant.stock,
+    size,
   });
 
   saveCart(current);
 }
 
-export function removeFromCart(productId: string): void {
-  const filtered = getCart().filter((item) => item.productId !== productId);
+export function removeFromCart(cartKey: string): void {
+  const filtered = getCart().filter((item) => item.cartKey !== cartKey);
   saveCart(filtered);
 }
 
-export function updateCartQuantity(productId: string, quantity: number): void {
+export function updateCartQuantity(cartKey: string, quantity: number): void {
   const current = getCart();
 
   const next = current.map((item) => {
-    if (item.productId !== productId) {
+    if (item.cartKey !== cartKey) {
       return item;
     }
 

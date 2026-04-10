@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { Product } from "@/types/product";
@@ -11,6 +11,7 @@ export default function ProductDetailPage() {
   const params = useParams<{ slug: string }>();
   const [product, setProduct] = useState<Product | null>(null);
   const [quantity, setQuantity] = useState(1);
+  const [selectedSize, setSelectedSize] = useState("");
 
   useEffect(() => {
     const load = async (): Promise<void> => {
@@ -23,10 +24,28 @@ export default function ProductDetailPage() {
 
       const data = (await response.json()) as Product;
       setProduct(data);
+
+      const firstAvailable =
+        data.sizeVariants.find((item) => item.stock > 0)?.size ||
+        data.sizeVariants[0]?.size ||
+        "";
+
+      setSelectedSize(firstAvailable);
+      setQuantity(1);
     };
 
     void load();
   }, [params.slug]);
+
+  const selectedVariant = useMemo(() => {
+    if (!product) {
+      return undefined;
+    }
+
+    return product.sizeVariants.find((item) => item.size === selectedSize);
+  }, [product, selectedSize]);
+
+  const selectedStock = selectedVariant?.stock ?? 0;
 
   if (!product) {
     return (
@@ -63,7 +82,6 @@ export default function ProductDetailPage() {
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-slate-950 px-4 py-4 text-white sm:px-6 sm:py-6">
-      {/* background glow */}
       <div className="absolute inset-0">
         <div className="absolute left-[-120px] top-[-120px] h-72 w-72 rounded-full bg-cyan-500/20 blur-3xl" />
         <div className="absolute right-[-120px] top-32 h-80 w-80 rounded-full bg-blue-600/20 blur-3xl" />
@@ -71,7 +89,6 @@ export default function ProductDetailPage() {
       </div>
 
       <div className="relative mx-auto max-w-6xl">
-        {/* top buttons */}
         <div className="mb-5 flex items-center justify-between gap-3 sm:mb-6">
           <Link
             href="/shop"
@@ -89,10 +106,8 @@ export default function ProductDetailPage() {
           </Link>
         </div>
 
-        {/* main card */}
         <div className="overflow-hidden rounded-[32px] border border-white/10 bg-white/10 shadow-[0_20px_80px_rgba(0,0,0,0.35)] backdrop-blur-xl">
           <div className="grid md:grid-cols-2">
-            {/* image */}
             <div className="relative">
               <div className="aspect-square overflow-hidden bg-slate-900/40 md:h-full">
                 <img
@@ -111,7 +126,6 @@ export default function ProductDetailPage() {
               </div>
             </div>
 
-            {/* content */}
             <div className="flex flex-col p-5 sm:p-6 md:p-8">
               <div className="mb-5 space-y-4">
                 <p className="text-xs font-semibold uppercase tracking-[0.28em] text-cyan-200">
@@ -128,7 +142,9 @@ export default function ProductDetailPage() {
                   </p>
 
                   <div className="rounded-full border border-white/10 bg-white/10 px-3 py-1.5 text-xs font-semibold text-slate-200 backdrop-blur">
-                    Үлдэгдэл: {product.stock} ш
+                    {selectedSize
+                      ? `Size ${selectedSize} үлдэгдэл: ${selectedStock} ш`
+                      : `Нийт үлдэгдэл: ${product.stock} ш`}
                   </div>
                 </div>
               </div>
@@ -142,25 +158,60 @@ export default function ProductDetailPage() {
               <div className="mt-auto space-y-4">
                 <div className="rounded-[24px] border border-white/10 bg-white/10 p-4 shadow-sm backdrop-blur">
                   <p className="mb-3 text-sm font-semibold text-white">
+                    Size сонгох
+                  </p>
+
+                  <div className="flex flex-wrap gap-2">
+                    {product.sizeVariants.map((item) => {
+                      const isSelected = item.size === selectedSize;
+                      const isDisabled = item.stock === 0;
+
+                      return (
+                        <button
+                          key={item.size}
+                          type="button"
+                          onClick={() => {
+                            setSelectedSize(item.size);
+                            setQuantity(1);
+                          }}
+                          disabled={isDisabled}
+                          className={`rounded-xl border px-4 py-2 text-sm font-semibold transition ${
+                            isSelected
+                              ? "border-cyan-400 bg-cyan-500 text-white"
+                              : "border-white/10 bg-white/10 text-slate-200"
+                          } ${isDisabled ? "cursor-not-allowed opacity-50" : ""}`}
+                        >
+                          {item.size} ({item.stock})
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <div className="rounded-[24px] border border-white/10 bg-white/10 p-4 shadow-sm backdrop-blur">
+                  <p className="mb-3 text-sm font-semibold text-white">
                     Тоо ширхэг сонгох
                   </p>
 
                   <QuantitySelector
                     value={quantity}
                     onChange={setQuantity}
-                    max={Math.max(product.stock, 1)}
+                    max={Math.max(selectedStock, 1)}
                   />
                 </div>
 
                 <div className="rounded-[24px] border border-cyan-400/20 bg-gradient-to-r from-cyan-500 to-blue-600 p-3 shadow-[0_20px_40px_rgba(14,165,233,0.22)]">
-                  <AddToCartButton product={product} quantity={quantity} />
+                  <AddToCartButton
+                    product={product}
+                    quantity={quantity}
+                    selectedSize={selectedSize}
+                  />
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* extra info */}
         <div className="mt-6 grid gap-4 md:grid-cols-3">
           <div className="rounded-[24px] border border-white/10 bg-white/10 p-4 text-slate-200 backdrop-blur">
             <p className="text-sm font-bold text-white">Хурдан хүргэлт</p>

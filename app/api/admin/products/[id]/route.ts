@@ -3,15 +3,51 @@ import { connectDb } from "@/lib/db";
 import Product from "@/models/Product";
 import Category from "@/models/Category";
 
+interface ProductSizeBody {
+  size: string;
+  stock: number;
+}
+
 interface ProductBody {
   name: string;
   slug: string;
   description: string;
   price: number;
-  stock: number;
   imageUrl: string;
   categoryId: string;
+  sizeVariants: ProductSizeBody[];
   isActive: boolean;
+}
+
+function normalizeSizeVariants(
+  sizeVariants: ProductSizeBody[] | undefined
+): ProductSizeBody[] {
+  if (!Array.isArray(sizeVariants)) {
+    return [];
+  }
+
+  const normalized = sizeVariants
+    .map((item) => ({
+      size: String(item.size || "").trim().toUpperCase(),
+      stock: Number(item.stock),
+    }))
+    .filter(
+      (item) =>
+        item.size.length > 0 &&
+        Number.isInteger(item.stock) &&
+        item.stock >= 0
+    );
+
+  const uniqueMap = new Map<string, number>();
+
+  for (const item of normalized) {
+    uniqueMap.set(item.size, item.stock);
+  }
+
+  return Array.from(uniqueMap.entries()).map(([size, stock]) => ({
+    size,
+    stock,
+  }));
 }
 
 export async function PUT(
@@ -22,6 +58,22 @@ export async function PUT(
 
   const { id } = await context.params;
   const body = (await req.json()) as ProductBody;
+  const normalizedSizes = normalizeSizeVariants(body.sizeVariants);
+
+  if (
+    !body.name ||
+    !body.slug ||
+    !body.description ||
+    !body.imageUrl ||
+    !body.categoryId ||
+    Number(body.price) < 0 ||
+    normalizedSizes.length === 0
+  ) {
+    return NextResponse.json(
+      { message: "Барааны мэдээллээ бүрэн зөв оруулна уу" },
+      { status: 400 }
+    );
+  }
 
   const duplicate = await Product.findOne({
     slug: body.slug.trim().toLowerCase(),
@@ -45,9 +97,9 @@ export async function PUT(
       slug: body.slug.trim().toLowerCase(),
       description: body.description,
       price: Number(body.price),
-      stock: Number(body.stock),
       imageUrl: body.imageUrl,
       categoryId: body.categoryId,
+      sizeVariants: normalizedSizes,
       isActive: body.isActive,
     },
     { new: true }

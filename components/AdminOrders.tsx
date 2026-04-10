@@ -146,15 +146,21 @@ export default function AdminOrders({ adminSecret }: Props) {
               </div>
 
               <div className="mt-4 space-y-2 border-t pt-4 text-sm">
-                {order.items.map((item) => (
+                {order.items.map((item, index) => (
                   <div
-                    key={`${order._id}-${item.productId}`}
-                    className="flex items-center justify-between text-black"
+                    key={`${order._id}-${item.productId}-${item.size}-${index}`}
+                    className="flex items-center justify-between gap-4 text-black"
                   >
-                    <span>
-                      {item.productName} x {item.quantity}
+                    <div>
+                      <p className="font-medium">{item.productName}</p>
+                      <p className="text-xs text-gray-500">
+                        Size: {item.size} / Тоо: {item.quantity}
+                      </p>
+                    </div>
+
+                    <span className="shrink-0 font-semibold">
+                      ₮{item.lineTotal.toLocaleString()}
                     </span>
-                    <span>₮{item.lineTotal.toLocaleString()}</span>
                   </div>
                 ))}
               </div>

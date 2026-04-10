@@ -6,15 +6,20 @@ import Order from "@/models/Order";
 import { createQPayInvoice, getBestPaymentLink } from "@/lib/qpay";
 import { env } from "@/lib/env";
 
+interface ProductLeanSize {
+  size: string;
+  stock: number;
+}
+
 interface ProductLean {
   _id: mongoose.Types.ObjectId;
   name: string;
   slug: string;
   description: string;
   price: number;
-  stock: number;
   imageUrl: string;
   categoryId: mongoose.Types.ObjectId;
+  sizeVariants: ProductLeanSize[];
   isActive: boolean;
 }
 
@@ -24,6 +29,7 @@ interface CreateOrderBody {
   address: string;
   items: Array<{
     productId: string;
+    size: string;
     quantity: number;
   }>;
 }
@@ -46,12 +52,19 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       );
     }
 
-    const items = body.items.filter(
-      (item) =>
-        item.productId.trim().length > 0 &&
-        Number.isInteger(item.quantity) &&
-        item.quantity > 0
-    );
+    const items = body.items
+      .map((item) => ({
+        productId: String(item.productId || "").trim(),
+        size: String(item.size || "").trim().toUpperCase(),
+        quantity: Number(item.quantity),
+      }))
+      .filter(
+        (item) =>
+          item.productId.length > 0 &&
+          item.size.length > 0 &&
+          Number.isInteger(item.quantity) &&
+          item.quantity > 0
+      );
 
     if (items.length === 0) {
       return NextResponse.json({ message: "Сагс хоосон байна" }, { status: 400 });
@@ -66,7 +79,9 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       isActive: true,
     }).lean()) as ProductLean[];
 
-    if (products.length !== items.length) {
+    const uniqueRequestedProductIds = new Set(items.map((item) => item.productId));
+
+    if (products.length !== uniqueRequestedProductIds.size) {
       return NextResponse.json(
         { message: "Зарим бараа олдсонгүй" },
         { status: 400 }
@@ -82,8 +97,18 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         throw new Error("Product not found while building order");
       }
 
-      if (product.stock < item.quantity) {
-        throw new Error(`${product.name} барааны үлдэгдэл хүрэлцэхгүй байна`);
+      const variant = product.sizeVariants.find(
+        (variantItem) => variantItem.size === item.size
+      );
+
+      if (!variant) {
+        throw new Error(`${product.name} барааны ${item.size} size олдсонгүй`);
+      }
+
+      if (variant.stock < item.quantity) {
+        throw new Error(
+          `${product.name} барааны ${item.size} size-ийн үлдэгдэл хүрэлцэхгүй байна`
+        );
       }
 
       return {
@@ -92,6 +117,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         productSlug: product.slug,
         imageUrl: product.imageUrl,
         price: product.price,
+        size: item.size,
         quantity: item.quantity,
         lineTotal: product.price * item.quantity,
       };
@@ -153,21 +179,21 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
     await created.save();
 
-return NextResponse.json({
-  message: "Захиалга амжилттай үүслээ",
-  order: {
-    _id: String(created._id),
-    status: created.status,
-    totalAmount: created.totalAmount,
-    qpayInvoiceId: created.qpayInvoiceId,
-    qpayQrText: created.qpayQrText,
-    qpayQrImage: created.qpayQrImage,
-    qpayPaymentUrl: created.qpayPaymentUrl,
-    qpayDeepLink: created.qpayDeepLink,
-    qpayShortUrl: created.qpayShortUrl,
-    qpayUrls: created.qpayUrls,
-  },
-});
+    return NextResponse.json({
+      message: "Захиалга амжилттай үүслээ",
+      order: {
+        _id: String(created._id),
+        status: created.status,
+        totalAmount: created.totalAmount,
+        qpayInvoiceId: created.qpayInvoiceId,
+        qpayQrText: created.qpayQrText,
+        qpayQrImage: created.qpayQrImage,
+        qpayPaymentUrl: created.qpayPaymentUrl,
+        qpayDeepLink: created.qpayDeepLink,
+        qpayShortUrl: created.qpayShortUrl,
+        qpayUrls: created.qpayUrls,
+      },
+    });
   } catch (error) {
     const message =
       error instanceof Error ? error.message : "Захиалга үүсгэх үед алдаа гарлаа";

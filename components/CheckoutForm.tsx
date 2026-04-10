@@ -118,6 +118,7 @@ export default function CheckoutForm() {
           address,
           items: items.map((item) => ({
             productId: item.productId,
+            size: item.size,
             quantity: item.quantity,
           })),
         }),
@@ -263,14 +264,14 @@ export default function CheckoutForm() {
             <>
               <div className="mt-5 space-y-3">
                 {items.map((item) => (
-                  <div
-                    key={item.productId}
-                    className="rounded-2xl bg-slate-50 p-4"
-                  >
+                  <div key={item.cartKey} className="rounded-2xl bg-slate-50 p-4">
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0">
                         <p className="line-clamp-2 font-semibold text-slate-900">
                           {item.name}
+                        </p>
+                        <p className="mt-1 text-sm text-slate-500">
+                          Size: {item.size}
                         </p>
                         <p className="mt-1 text-sm text-slate-500">
                           {item.quantity} ш × ₮{item.price.toLocaleString()}
@@ -317,32 +318,7 @@ export default function CheckoutForm() {
           </div>
         </div>
 
-        {qpayQrImage ? (
-          <div className="mt-6 rounded-[28px] border border-slate-200 bg-slate-50 p-5">
-            <p className="mb-4 text-center text-sm font-semibold text-slate-700">
-              QR код уншуулж төлнө үү
-            </p>
-            <div className="flex justify-center">
-              <img
-                src={qpayQrImage}
-                alt="QPay QR"
-                className="h-64 w-64 rounded-2xl border border-slate-200 bg-white object-contain p-2"
-              />
-            </div>
-          </div>
-        ) : null}
-
         <div className="mt-6 space-y-3">
-          {qpayShortUrl ? (
-            <a
-              href={qpayShortUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="block rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 px-4 py-4 text-center text-sm font-bold text-white shadow-[0_20px_40px_rgba(14,165,233,0.22)] transition duration-200 hover:scale-[1.01] hover:from-cyan-400 hover:to-blue-500"
-            >
-              QPay линкээр төлөх
-            </a>
-          ) : null}
 
           <button
             type="button"

@@ -4,15 +4,25 @@ import { connectDb } from "@/lib/db";
 import Product from "@/models/Product";
 import Category from "@/models/Category";
 
+interface ProductSizeBody {
+  size: string;
+  stock: number;
+}
+
 interface ProductBody {
   name: string;
   slug: string;
   description: string;
   price: number;
-  stock: number;
   imageUrl: string;
   categoryId: string;
+  sizeVariants: ProductSizeBody[];
   isActive: boolean;
+}
+
+interface ProductLeanSize {
+  size: string;
+  stock: number;
 }
 
 interface ProductLean {
@@ -21,9 +31,9 @@ interface ProductLean {
   slug: string;
   description: string;
   price: number;
-  stock: number;
   imageUrl: string;
   categoryId: mongoose.Types.ObjectId;
+  sizeVariants: ProductLeanSize[];
   isActive: boolean;
 }
 
@@ -31,6 +41,41 @@ interface CategoryLean {
   _id: mongoose.Types.ObjectId;
   name: string;
   slug: string;
+}
+
+function normalizeSizeVariants(
+  sizeVariants: ProductSizeBody[] | undefined
+): ProductSizeBody[] {
+  if (!Array.isArray(sizeVariants)) {
+    return [];
+  }
+
+  const normalized = sizeVariants
+    .map((item) => ({
+      size: String(item.size || "").trim().toUpperCase(),
+      stock: Number(item.stock),
+    }))
+    .filter(
+      (item) =>
+        item.size.length > 0 &&
+        Number.isInteger(item.stock) &&
+        item.stock >= 0
+    );
+
+  const uniqueMap = new Map<string, number>();
+
+  for (const item of normalized) {
+    uniqueMap.set(item.size, item.stock);
+  }
+
+  return Array.from(uniqueMap.entries()).map(([size, stock]) => ({
+    size,
+    stock,
+  }));
+}
+
+function getTotalStock(sizeVariants: ProductLeanSize[]): number {
+  return sizeVariants.reduce((sum, item) => sum + item.stock, 0);
 }
 
 export async function GET(): Promise<NextResponse> {
@@ -50,11 +95,15 @@ export async function GET(): Promise<NextResponse> {
       slug: product.slug,
       description: product.description,
       price: product.price,
-      stock: product.stock,
+      stock: getTotalStock(product.sizeVariants),
       imageUrl: product.imageUrl,
       categoryId: product.categoryId.toString(),
       categoryName: category?.name || "",
       categorySlug: category?.slug || "",
+      sizeVariants: product.sizeVariants.map((item) => ({
+        size: item.size,
+        stock: item.stock,
+      })),
       isActive: product.isActive,
     };
   });
@@ -66,6 +115,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   await connectDb();
 
   const body = (await req.json()) as ProductBody;
+  const normalizedSizes = normalizeSizeVariants(body.sizeVariants);
 
   if (
     !body.name ||
@@ -74,15 +124,17 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     !body.imageUrl ||
     !body.categoryId ||
     Number(body.price) < 0 ||
-    Number(body.stock) < 0
+    normalizedSizes.length === 0
   ) {
     return NextResponse.json(
-      { message: "Барааны мэдээллээ бүрэн оруулна уу" },
+      { message: "Барааны мэдээллээ бүрэн зөв оруулна уу" },
       { status: 400 }
     );
   }
 
-  const duplicate = await Product.findOne({ slug: body.slug.trim().toLowerCase() });
+  const duplicate = await Product.findOne({
+    slug: body.slug.trim().toLowerCase(),
+  });
 
   if (duplicate) {
     return NextResponse.json({ message: "slug давхцаж байна" }, { status: 400 });
@@ -99,9 +151,9 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     slug: body.slug.trim().toLowerCase(),
     description: body.description,
     price: Number(body.price),
-    stock: Number(body.stock),
     imageUrl: body.imageUrl,
     categoryId: body.categoryId,
+    sizeVariants: normalizedSizes,
     isActive: body.isActive,
   });
 

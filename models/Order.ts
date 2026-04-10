@@ -6,6 +6,7 @@ interface OrderItemDocument {
   productSlug: string;
   imageUrl: string;
   price: number;
+  size: string;
   quantity: number;
   lineTotal: number;
 }
@@ -46,6 +47,7 @@ const OrderItemSchema = new Schema<OrderItemDocument>(
     productSlug: { type: String, required: true },
     imageUrl: { type: String, required: true },
     price: { type: Number, required: true, min: 0 },
+    size: { type: String, required: true, trim: true, uppercase: true },
     quantity: { type: Number, required: true, min: 1 },
     lineTotal: { type: Number, required: true, min: 0 },
   },
