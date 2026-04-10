@@ -22,6 +22,8 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       lastName: item.lastName,
       firstName: item.firstName,
       registerNumber: item.registerNumber,
+      age: item.age,
+      gender: item.gender,
       phonePrimary: item.phonePrimary,
       phoneEmergency: item.phoneEmergency,
       homeAddress: item.homeAddress,
@@ -42,6 +44,6 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       paidAt: item.paidAt ? item.paidAt.toISOString() : undefined,
       createdAt: item.createdAt.toISOString(),
       updatedAt: item.updatedAt.toISOString(),
-    }))
+    })),
   );
 }

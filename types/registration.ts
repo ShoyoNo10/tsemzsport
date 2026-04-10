@@ -6,12 +6,15 @@ export interface QPayUrlItem {
   link: string;
 }
 
+export type GenderType = "male" | "female"; 
 
 export interface RegistrationDto {
   _id: string;
   lastName: string;
   firstName: string;
   registerNumber: string;
+  age: number;
+  gender: GenderType;
   phonePrimary: string;
   phoneEmergency: string;
   homeAddress: string;

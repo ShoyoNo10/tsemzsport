@@ -10,7 +10,7 @@ interface RouteContext {
 
 export async function GET(
   _request: NextRequest,
-  context: RouteContext
+  context: RouteContext,
 ): Promise<NextResponse> {
   try {
     await connectDb();
@@ -22,7 +22,7 @@ export async function GET(
     if (!registration) {
       return NextResponse.json(
         { message: "Бүртгэл олдсонгүй" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -32,6 +32,8 @@ export async function GET(
         lastName: registration.lastName,
         firstName: registration.firstName,
         registerNumber: registration.registerNumber,
+        age: registration.age,
+        gender: registration.gender,
         phonePrimary: registration.phonePrimary,
         phoneEmergency: registration.phoneEmergency,
         homeAddress: registration.homeAddress,
@@ -64,7 +66,7 @@ export async function GET(
         message: "Бүртгэл унших үед алдаа гарлаа",
         error: message,
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

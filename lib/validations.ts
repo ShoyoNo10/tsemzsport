@@ -63,9 +63,6 @@
 // export type CreateClassOptionInput = z.infer<typeof createClassOptionSchema>;
 // export type CreateRegistrationInput = z.infer<typeof createRegistrationSchema>;
 
-
-
-
 import { z } from "zod";
 
 export const weekdaySchema = z.enum([
@@ -124,6 +121,10 @@ export const createRegistrationSchema = z.object({
   registerNumber: z
     .string()
     .regex(/^[А-ЯӨҮЁа-яөүёA-Za-z]{2}\d{8}$/, "Регистрийн формат буруу байна"),
+  age: z.coerce.number().min(1, "Нас буруу байна").max(100, "Нас буруу байна"),
+  gender: z.enum(["male", "female"], {
+    message: "Хүйс сонгоно уу",
+  }),
   phonePrimary: z.string().min(8, "Утас 1 буруу байна"),
   phoneEmergency: z.string().min(8, "Яаралтай үед холбогдох утас буруу байна"),
   homeAddress: z.string().min(1, "Гэрийн хаяг шаардлагатай"),
