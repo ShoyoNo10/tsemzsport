@@ -804,7 +804,9 @@ export default function RegistrationForm() {
             </p>
 
             <div className="grid gap-4 md:grid-cols-2">
-              {branches.map((branch) => {
+              {/* {branches.map((branch) => {
+                const isSelected = selectedBranchId === branch._id; */}
+              {[...branches].reverse().map((branch) => {
                 const isSelected = selectedBranchId === branch._id;
 
                 return (
