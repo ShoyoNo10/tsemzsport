@@ -537,8 +537,6 @@
 //   );
 // }
 
-
-
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
@@ -578,6 +576,16 @@ const initialFormState: FormState = {
   homeAddress: "",
   classOptionId: "",
   classSeasonId: "",
+};
+
+const dayMap: Record<string, string> = {
+  Monday: "Даваа",
+  Tuesday: "Мягмар",
+  Wednesday: "Лхагва",
+  Thursday: "Пүрэв",
+  Friday: "Баасан",
+  Saturday: "Бямба",
+  Sunday: "Ням",
 };
 
 export default function RegistrationForm() {
@@ -650,7 +658,8 @@ export default function RegistrationForm() {
   const filteredSeasons = useMemo(() => {
     if (!form.classOptionId) return [];
     return classSeasons.filter(
-      (item) => item.classOptionId === form.classOptionId && item.status === "active"
+      (item) =>
+        item.classOptionId === form.classOptionId && item.status === "active",
     );
   }, [classSeasons, form.classOptionId]);
 
@@ -678,7 +687,9 @@ export default function RegistrationForm() {
   }, [selectedBranchId, form, selectedSeason]);
 
   const handleChange = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    event: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
   ): void => {
     const { name, value } = event.target;
 
@@ -788,7 +799,9 @@ export default function RegistrationForm() {
           </div>
 
           <div className="mb-6">
-            <p className="mb-3 text-sm font-semibold text-slate-700">Салбар сонгох</p>
+            <p className="mb-3 text-sm font-semibold text-slate-700">
+              Салбар сонгох
+            </p>
 
             <div className="grid gap-4 md:grid-cols-2">
               {branches.map((branch) => {
@@ -814,10 +827,16 @@ export default function RegistrationForm() {
                     </div>
 
                     <div className="p-4">
-                      <h3 className="text-lg font-bold text-slate-900">{branch.name}</h3>
-                      <p className="mt-1 text-sm text-slate-500">{branch.address}</p>
+                      <h3 className="text-lg font-bold text-slate-900">
+                        {branch.name}
+                      </h3>
+                      <p className="mt-1 text-sm text-slate-500">
+                        {branch.address}
+                      </p>
                       {branch.description ? (
-                        <p className="mt-2 text-sm text-slate-600">{branch.description}</p>
+                        <p className="mt-2 text-sm text-slate-600">
+                          {branch.description}
+                        </p>
                       ) : null}
                     </div>
                   </button>
@@ -871,6 +890,134 @@ export default function RegistrationForm() {
             </div>
 
             <div className="grid gap-5 sm:grid-cols-2">
+              <div className="sm:col-span-2">
+                <label className={labelClassName}>Анги сонголт</label>
+                <select
+                  name="classOptionId"
+                  value={form.classOptionId}
+                  onChange={(event) => handleClassChange(event.target.value)}
+                  className={inputClassName}
+                >
+                  <option value="">Сонгоно уу</option>
+                  {filteredClassOptions.map((item) => (
+                    <option key={item._id} value={item._id}>
+                      {item.title} — {item.ageRangeLabel} —{" "}
+                      {item.price.toLocaleString()}₮
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="sm:col-span-2">
+                {selectedClass && selectedBranch && selectedSchedule ? (
+                  <div className="rounded-[24px] border border-cyan-200 bg-gradient-to-br from-cyan-50 to-blue-50 p-5 shadow-sm">
+                    <h3 className="text-lg font-bold text-slate-900">
+                      Сонгосон ангийн мэдээлэл
+                    </h3>
+
+                    <div className="mt-4 grid gap-4 md:grid-cols-2">
+                      <div className="rounded-2xl bg-white p-4">
+                        <p className="text-xs font-semibold uppercase tracking-wide text-cyan-700">
+                          Анги
+                        </p>
+                        <p className="mt-1 text-base font-bold text-slate-900">
+                          {selectedClass.title}
+                        </p>
+                        <p className="mt-1 text-slate-600">
+                          {selectedClass.ageRangeLabel}
+                        </p>
+                      </div>
+
+                      <div className="rounded-2xl bg-white p-4">
+                        <p className="text-xs font-semibold uppercase tracking-wide text-cyan-700">
+                          Үнэ
+                        </p>
+                        <p className="mt-1 text-lg font-bold text-slate-900">
+                          {selectedClass.price.toLocaleString()}₮
+                        </p>
+                      </div>
+
+                      <div className="rounded-2xl bg-white p-4">
+                        <p className="text-xs font-semibold uppercase tracking-wide text-cyan-700">
+                          Салбар
+                        </p>
+                        <p className="mt-1 font-semibold text-slate-900">
+                          {selectedBranch.name}
+                        </p>
+                        <p className="mt-1 text-slate-600">
+                          {selectedBranch.address}
+                        </p>
+                      </div>
+
+                      <div className="rounded-2xl bg-white p-4">
+                        <p className="text-xs font-semibold uppercase tracking-wide text-cyan-700">
+                          7 хоногт
+                        </p>
+                        <p className="mt-1 text-lg font-bold text-slate-900">
+                          {selectedSchedule.sessionsPerWeek} удаа
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="mt-4 rounded-2xl bg-white p-4">
+                      <p className="text-xs font-semibold uppercase tracking-wide text-cyan-700">
+                        Цагийн хуваарь
+                      </p>
+
+                      <ul className="mt-3 space-y-2">
+                        {selectedSchedule.slots.map((slot, index) => (
+                          <li
+                            key={`${slot.day}-${slot.startTime}-${slot.endTime}-${index}`}
+                            className="flex items-center justify-between rounded-xl bg-slate-50 px-4 py-3"
+                          >
+                            <span className="font-medium text-slate-800">
+                              {dayMap[slot.day] ?? slot.day}
+                            </span>
+                            <span className="text-slate-600">
+                              {slot.startTime} - {slot.endTime}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="rounded-[24px] border border-dashed border-slate-300 bg-slate-50 p-5">
+                    <h3 className="text-base font-bold text-slate-900">
+                      Сонгосон ангийн мэдээлэл
+                    </h3>
+                    <p className="mt-2 text-sm text-slate-500">
+                      Анги сонгосны дараа энд гарч ирнэ.
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              <div className="sm:col-span-2">
+                <label className={labelClassName}>Сар сонголт</label>
+                <select
+                  name="classSeasonId"
+                  value={form.classSeasonId}
+                  onChange={handleChange}
+                  className={inputClassName}
+                  disabled={!form.classOptionId}
+                >
+                  <option value="">Сонгоно уу</option>
+                  {filteredSeasons.map((item) => (
+                    <option
+                      key={item._id}
+                      value={item._id}
+                      disabled={item.isFull}
+                    >
+                      {item.seasonLabel}
+                      {item.isFull
+                        ? " — Дүүрсэн"
+                        : ` — Үлдсэн суудал: ${item.remainingSeats}`}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
               <div>
                 <label className={labelClassName}>Овог</label>
                 <input
@@ -943,7 +1090,9 @@ export default function RegistrationForm() {
               </div>
 
               <div>
-                <label className={labelClassName}>Яаралтай үед холбогдох утас</label>
+                <label className={labelClassName}>
+                  Яаралтай үед холбогдох утас
+                </label>
                 <input
                   name="phoneEmergency"
                   value={form.phoneEmergency}
@@ -951,123 +1100,6 @@ export default function RegistrationForm() {
                   placeholder="88112233"
                   className={inputClassName}
                 />
-              </div>
-
-              <div className="sm:col-span-2">
-                <label className={labelClassName}>Анги сонголт</label>
-                <select
-                  name="classOptionId"
-                  value={form.classOptionId}
-                  onChange={(event) => handleClassChange(event.target.value)}
-                  className={inputClassName}
-                >
-                  <option value="">Сонгоно уу</option>
-                  {filteredClassOptions.map((item) => (
-                    <option key={item._id} value={item._id}>
-                      {item.title} — {item.ageRangeLabel} — {item.price.toLocaleString()}₮
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="sm:col-span-2">
-                {selectedClass && selectedBranch && selectedSchedule ? (
-                  <div className="rounded-[24px] border border-cyan-200 bg-gradient-to-br from-cyan-50 to-blue-50 p-5 shadow-sm">
-                    <h3 className="text-lg font-bold text-slate-900">
-                      Сонгосон ангийн мэдээлэл
-                    </h3>
-
-                    <div className="mt-4 grid gap-4 md:grid-cols-2">
-                      <div className="rounded-2xl bg-white p-4">
-                        <p className="text-xs font-semibold uppercase tracking-wide text-cyan-700">
-                          Анги
-                        </p>
-                        <p className="mt-1 text-base font-bold text-slate-900">
-                          {selectedClass.title}
-                        </p>
-                        <p className="mt-1 text-slate-600">{selectedClass.ageRangeLabel}</p>
-                      </div>
-
-                      <div className="rounded-2xl bg-white p-4">
-                        <p className="text-xs font-semibold uppercase tracking-wide text-cyan-700">
-                          Үнэ
-                        </p>
-                        <p className="mt-1 text-lg font-bold text-slate-900">
-                          {selectedClass.price.toLocaleString()}₮
-                        </p>
-                      </div>
-
-                      <div className="rounded-2xl bg-white p-4">
-                        <p className="text-xs font-semibold uppercase tracking-wide text-cyan-700">
-                          Салбар
-                        </p>
-                        <p className="mt-1 font-semibold text-slate-900">
-                          {selectedBranch.name}
-                        </p>
-                        <p className="mt-1 text-slate-600">{selectedBranch.address}</p>
-                      </div>
-
-                      <div className="rounded-2xl bg-white p-4">
-                        <p className="text-xs font-semibold uppercase tracking-wide text-cyan-700">
-                          7 хоногт
-                        </p>
-                        <p className="mt-1 text-lg font-bold text-slate-900">
-                          {selectedSchedule.sessionsPerWeek} удаа
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="mt-4 rounded-2xl bg-white p-4">
-                      <p className="text-xs font-semibold uppercase tracking-wide text-cyan-700">
-                        Цагийн хуваарь
-                      </p>
-
-                      <ul className="mt-3 space-y-2">
-                        {selectedSchedule.slots.map((slot, index) => (
-                          <li
-                            key={`${slot.day}-${slot.startTime}-${slot.endTime}-${index}`}
-                            className="flex items-center justify-between rounded-xl bg-slate-50 px-4 py-3"
-                          >
-                            <span className="font-medium text-slate-800">{slot.day}</span>
-                            <span className="text-slate-600">
-                              {slot.startTime} - {slot.endTime}
-                            </span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="rounded-[24px] border border-dashed border-slate-300 bg-slate-50 p-5">
-                    <h3 className="text-base font-bold text-slate-900">
-                      Сонгосон ангийн мэдээлэл
-                    </h3>
-                    <p className="mt-2 text-sm text-slate-500">
-                      Анги сонгосны дараа энд гарч ирнэ.
-                    </p>
-                  </div>
-                )}
-              </div>
-
-              <div className="sm:col-span-2">
-                <label className={labelClassName}>Сар сонголт</label>
-                <select
-                  name="classSeasonId"
-                  value={form.classSeasonId}
-                  onChange={handleChange}
-                  className={inputClassName}
-                  disabled={!form.classOptionId}
-                >
-                  <option value="">Сонгоно уу</option>
-                  {filteredSeasons.map((item) => (
-                    <option key={item._id} value={item._id} disabled={item.isFull}>
-                      {item.seasonLabel}
-                      {item.isFull
-                        ? " — Дүүрсэн"
-                        : ` — Үлдсэн суудал: ${item.remainingSeats}`}
-                    </option>
-                  ))}
-                </select>
               </div>
             </div>
 

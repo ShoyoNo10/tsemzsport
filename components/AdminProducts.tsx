@@ -72,12 +72,12 @@ export default function AdminProducts({ adminSecret }: Props) {
   const setSizeField = (
     index: number,
     key: keyof FormSizeState,
-    value: string
+    value: string,
   ): void => {
     setForm((prev) => ({
       ...prev,
       sizeVariants: prev.sizeVariants.map((item, itemIndex) =>
-        itemIndex === index ? { ...item, [key]: value } : item
+        itemIndex === index ? { ...item, [key]: value } : item,
       ),
     }));
   };
@@ -100,7 +100,9 @@ export default function AdminProducts({ adminSecret }: Props) {
 
       return {
         ...prev,
-        sizeVariants: prev.sizeVariants.filter((_, itemIndex) => itemIndex !== index),
+        sizeVariants: prev.sizeVariants.filter(
+          (_, itemIndex) => itemIndex !== index,
+        ),
       };
     });
   };
@@ -115,7 +117,7 @@ export default function AdminProducts({ adminSecret }: Props) {
         (item) =>
           item.size.length > 0 &&
           Number.isInteger(item.stock) &&
-          item.stock >= 0
+          item.stock >= 0,
       );
 
     const uniqueMap = new Map<string, number>();
@@ -151,7 +153,7 @@ export default function AdminProducts({ adminSecret }: Props) {
           sizeVariants,
           isActive: form.isActive,
         }),
-      }
+      },
     );
 
     const data = (await response.json()) as { message?: string };
@@ -205,7 +207,16 @@ export default function AdminProducts({ adminSecret }: Props) {
 
   return (
     <div className="space-y-4 rounded-2xl border border-gray-200 bg-white p-4">
-      <h2 className="text-xl font-bold text-black">Бараа</h2>
+      <div className="flex justify-between">
+        <h2 className="text-xl font-bold text-black">Бараа</h2>
+        <button
+          type="button"
+          onClick={() => void submit()}
+          className="rounded-xl bg-black px-4 py-3 text-white"
+        >
+          {editingId ? "Шинэчлэх" : "Нэмэх"}
+        </button>
+      </div>
 
       <div className="grid gap-3 md:grid-cols-2">
         <input
@@ -350,13 +361,13 @@ export default function AdminProducts({ adminSecret }: Props) {
         </label>
       </div>
 
-      <button
+      {/* <button
         type="button"
         onClick={() => void submit()}
         className="rounded-xl bg-black px-4 py-3 text-white"
       >
         {editingId ? "Шинэчлэх" : "Нэмэх"}
-      </button>
+      </button> */}
 
       {message ? <p className="text-sm text-blue-600">{message}</p> : null}
 
@@ -372,9 +383,12 @@ export default function AdminProducts({ adminSecret }: Props) {
                 />
                 <div>
                   <p className="font-semibold text-black">{product.name}</p>
-                  <p className="text-sm text-gray-500">{product.categoryName}</p>
+                  <p className="text-sm text-gray-500">
+                    {product.categoryName}
+                  </p>
                   <p className="text-sm text-black">
-                    ₮{product.price.toLocaleString()} / Нийт үлдэгдэл: {product.stock}
+                    ₮{product.price.toLocaleString()} / Нийт үлдэгдэл:{" "}
+                    {product.stock}
                   </p>
                   <div className="mt-2 flex flex-wrap gap-2">
                     {product.sizeVariants.map((item) => (
