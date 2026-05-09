@@ -848,25 +848,34 @@ export default function RegistrationForm() {
           </div>
         </div>
 
-        <div className="space-y-6">
-          <div className="rounded-[28px] border border-white/10 bg-white/10 p-6 text-white shadow-[0_20px_80px_rgba(0,0,0,0.25)] backdrop-blur-xl">
-            <h3 className="text-xl font-bold">Яагаад манай сургалт?</h3>
-            <div className="mt-4 space-y-3 text-sm text-slate-200">
-              <div className="rounded-2xl bg-white/10 p-4">
-                ✅ Салбар тус бүрийн ангиуд тусдаа харагдана
-              </div>
-              <div className="rounded-2xl bg-white/10 p-4">
-                ✅ Анги сонгосны дараа сар сонгоно
-              </div>
-              <div className="rounded-2xl bg-white/10 p-4">
-                ✅ Сарын суудлын үлдэгдэл автоматаар багасна
-              </div>
-              <div className="rounded-2xl bg-white/10 p-4">
-                ✅ Form нь popup-аар нээгдэж, зүгээр дархад хаагдахгүй
-              </div>
-            </div>
-          </div>
+<div className="space-y-6">
+  <div className="rounded-[28px] border border-white/10 bg-white/10 p-6 text-white shadow-[0_20px_80px_rgba(0,0,0,0.25)] backdrop-blur-xl">
+    <h3 className="text-xl font-bold">Салбаруудын хичээлийн хуваарь</h3>
+
+    <div className="mt-4 space-y-4 text-sm text-slate-200">
+      <div className="rounded-2xl bg-white/10 p-4">
+        <p className="font-semibold text-white">📍 Салбар 1 — БГД, Модны 2</p>
+        <p className="mt-1">Сан их сургуулийн заал, Макс Молл-н эсрэг талд</p>
+        <div className="mt-3 space-y-1">
+          <p>✅ 9-15 нас: Пүрэв 19:00, Бямба 11:00</p>
+          <p>✅ Насанд хүрэгчид /эрэгтэй/: Лхагва 19:00, Бямба 13:00</p>
+          <p>✅ Насанд хүрэгчид /эмэгтэй/: Мягмар 19:00, Бямба 15:00</p>
         </div>
+      </div>
+
+      <div className="rounded-2xl bg-white/10 p-4">
+        <p className="font-semibold text-white">📍 Салбар 2 — ХУД, Мишээл</p>
+        <div className="mt-3 space-y-1">
+          <p>✅ 9-16 нас: Лхагва 18:00, Бямба 19:00</p>
+        </div>
+      </div>
+
+      <div className="rounded-2xl bg-white/10 p-4">
+        📞 Холбоо барих: 99001522 • 95274840
+      </div>
+    </div>
+  </div>
+</div>
       </div>
 
       {isModalOpen && (
