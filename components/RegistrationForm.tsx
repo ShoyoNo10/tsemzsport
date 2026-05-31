@@ -2084,7 +2084,7 @@ export default function RegistrationForm() {
 
             <div className="mt-5 max-h-[52vh] overflow-y-auto rounded-2xl border border-slate-200 bg-slate-50 p-5 text-sm leading-7 text-slate-700">
               <div className="whitespace-pre-wrap">
-                {selectedClass.agreementText}
+                {selectedClass?.agreementText}
               </div>
             </div>
 
