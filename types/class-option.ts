@@ -32,6 +32,7 @@ export interface ClassOptionDto {
   description: string;
   isOpen: boolean;
   status: ClassOptionStatus;
+  agreementText?: string;
   createdAt: string;
   updatedAt: string;
 }
