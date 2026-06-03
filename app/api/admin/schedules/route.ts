@@ -24,6 +24,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       title: item.title,
       slots: item.slots,
       sessionsPerWeek: item.sessionsPerWeek,
+      displayLabel: item.displayLabel ?? "",
       status: item.status,
       createdAt: item.createdAt.toISOString(),
       updatedAt: item.updatedAt.toISOString(),
@@ -57,6 +58,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     title: created.title,
     slots: created.slots,
     sessionsPerWeek: created.sessionsPerWeek,
+    displayLabel: created.displayLabel ?? "",
     status: created.status,
     createdAt: created.createdAt.toISOString(),
     updatedAt: created.updatedAt.toISOString(),
@@ -81,6 +83,7 @@ export async function PATCH(request: NextRequest): Promise<NextResponse> {
       endTime: string;
     }[];
     sessionsPerWeek?: number;
+    displayLabel?: string;
     status?: "active" | "inactive";
   };
 
@@ -96,6 +99,7 @@ export async function PATCH(request: NextRequest): Promise<NextResponse> {
     title: json.title,
     slots: json.slots,
     sessionsPerWeek: json.sessionsPerWeek,
+    displayLabel: json.displayLabel,
     status: json.status,
   });
 
@@ -124,6 +128,7 @@ export async function PATCH(request: NextRequest): Promise<NextResponse> {
     title: updated.title,
     slots: updated.slots,
     sessionsPerWeek: updated.sessionsPerWeek,
+    displayLabel: updated.displayLabel ?? "",
     status: updated.status,
     createdAt: updated.createdAt.toISOString(),
     updatedAt: updated.updatedAt.toISOString(),

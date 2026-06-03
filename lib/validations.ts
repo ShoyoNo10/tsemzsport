@@ -26,8 +26,9 @@ export const createBranchSchema = z.object({
 
 export const createScheduleTemplateSchema = z.object({
   title: z.string().min(1, "Хуваарийн нэр шаардлагатай"),
-  slots: z.array(scheduleSlotSchema).min(1, "Дор хаяж 1 цагийн хуваарь нэмнэ"),
+ slots: z.array(scheduleSlotSchema).default([]),
   sessionsPerWeek: z.number().int().min(1, "7 хоногт орох тоо шаардлагатай"),
+  displayLabel: z.string().trim().optional().default(""),
   status: z.enum(["active", "inactive"]),
 });
 

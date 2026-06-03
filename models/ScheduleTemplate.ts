@@ -25,6 +25,7 @@ const slotSchema = new Schema(
       required: true,
       trim: true,
     },
+    
   },
   {
     _id: false,
@@ -48,6 +49,13 @@ const scheduleTemplateSchema = new Schema(
       required: true,
       min: 1,
     },
+
+        displayLabel: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
     status: {
       type: String,
       enum: ["active", "inactive"],

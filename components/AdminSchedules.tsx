@@ -19,6 +19,7 @@ interface ScheduleItem {
   title: string;
   slots: SlotInput[];
   sessionsPerWeek: number;
+  displayLabel: string;
   status: "active" | "inactive";
   createdAt: string;
   updatedAt: string;
@@ -48,6 +49,10 @@ export default function AdminSchedules({
   const [editSessionsPerWeek, setEditSessionsPerWeek] = useState<number>(3);
   const [editStatus, setEditStatus] = useState<"active" | "inactive">("active");
   const [editSlots, setEditSlots] = useState<SlotInput[]>([defaultSlot]);
+
+
+  const [displayLabel, setDisplayLabel] = useState<string>("");
+const [editDisplayLabel, setEditDisplayLabel] = useState<string>("");
 
   const fetchSchedules = async (): Promise<void> => {
     setLoading(true);
@@ -120,15 +125,9 @@ export default function AdminSchedules({
     ]);
   };
 
-  const removeSlot = (index: number): void => {
-    setSlots((previous) => {
-      if (previous.length === 1) {
-        return previous;
-      }
-
-      return previous.filter((_, itemIndex) => itemIndex !== index);
-    });
-  };
+const removeSlot = (index: number): void => {
+  setSlots((previous) => previous.filter((_, itemIndex) => itemIndex !== index));
+};
 
   const updateEditSlot = (
     index: number,
@@ -167,19 +166,16 @@ export default function AdminSchedules({
     ]);
   };
 
-  const removeEditSlot = (index: number): void => {
-    setEditSlots((previous) => {
-      if (previous.length === 1) {
-        return previous;
-      }
-
-      return previous.filter((_, itemIndex) => itemIndex !== index);
-    });
-  };
+const removeEditSlot = (index: number): void => {
+  setEditSlots((previous) =>
+    previous.filter((_, itemIndex) => itemIndex !== index)
+  );
+};
 
   const resetCreateForm = (): void => {
     setTitle("");
     setSessionsPerWeek(3);
+    setDisplayLabel("");
     setStatus("active");
     setSlots([defaultSlot]);
   };
@@ -198,6 +194,7 @@ export default function AdminSchedules({
           title,
           slots,
           sessionsPerWeek,
+          displayLabel,
           status,
         }),
       });
@@ -222,6 +219,7 @@ export default function AdminSchedules({
     setEditingId(schedule._id);
     setEditTitle(schedule.title);
     setEditSessionsPerWeek(schedule.sessionsPerWeek);
+    setEditDisplayLabel(schedule.displayLabel ?? "");
     setEditStatus(schedule.status);
     setEditSlots(schedule.slots.length > 0 ? schedule.slots : [defaultSlot]);
     setMessage("");
@@ -254,6 +252,7 @@ export default function AdminSchedules({
           title: editTitle,
           slots: editSlots,
           sessionsPerWeek: editSessionsPerWeek,
+          displayLabel: editDisplayLabel,
           status: editStatus,
         }),
       });
@@ -345,6 +344,13 @@ export default function AdminSchedules({
             placeholder="7 хоногт хэд орох"
             className="rounded-xl border px-4 py-3"
           />
+
+          <input
+  value={displayLabel}
+  onChange={(event) => setDisplayLabel(event.target.value)}
+  placeholder="Жишээ: 10 хоногийн сургалт • нийт 10 оролт"
+  className="rounded-xl border px-4 py-3"
+/>
 
           {slots.map((slot, index) => (
             <div
@@ -454,6 +460,13 @@ export default function AdminSchedules({
                         placeholder="7 хоногт хэд орох"
                       />
 
+                      <input
+  value={editDisplayLabel}
+  onChange={(event) => setEditDisplayLabel(event.target.value)}
+  className="rounded-xl border px-4 py-3"
+  placeholder="Жишээ: Эхний 7 хоногт 3 удаа, дараа 2 удаа"
+/>
+
                       {editSlots.map((slot, index) => (
                         <div
                           key={index}
@@ -544,7 +557,9 @@ export default function AdminSchedules({
                             {schedule.title}
                           </h4>
                           <p className="text-sm text-slate-500">
-                            7 хоногт {schedule.sessionsPerWeek} удаа • {schedule.status}
+                            {schedule.displayLabel?.trim()
+  ? schedule.displayLabel
+  : `7 хоногт ${schedule.sessionsPerWeek} удаа`}
                           </p>
                         </div>
 

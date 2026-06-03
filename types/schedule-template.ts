@@ -20,6 +20,7 @@ export interface ScheduleTemplateDto {
   title: string;
   slots: ScheduleSlot[];
   sessionsPerWeek: number;
+  displayLabel: string;
   status: ScheduleTemplateStatus;
   createdAt: string;
   updatedAt: string;
