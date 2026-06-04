@@ -375,16 +375,18 @@ export default function RegistrationForm() {
                   📍 Салбар 2 — ХУД, Мишээл
                 </p>
                 <div className="mt-3 space-y-1">
-                  <p>✅ 9-16 нас: Лхагва 18:00, Бямба 19:00</p>
+                  <p>✅ 9-12 нас: Лхагва 16:00, Бямба 17:00</p>
+                  <p>✅ 13-16 нас: Лхагва 18:00, Бямба 19:00</p>
                 </div>
               </div>
 
               <div className="rounded-2xl bg-white/10 p-4">
                 <p className="font-semibold text-white">
-                  📍 Зуны зуслан эрчимжүүлсэн 10 хоног сургалт
+                  📍 Зуны зуслан эрчимжүүлсэн сургалт
                 </p>
                 <div className="mt-3 space-y-1">
-                  <p>✅ 6 сарын 28 - 7 сарын 8</p>
+                  <p>✅ 1-р ээлж 6 сарын 27 - 7 сарын 3</p>
+                  <p>✅ 2-р ээлж 7 сарын 3 - 7 сарын 8</p>
                 </div>
               </div>
 
@@ -489,33 +491,33 @@ export default function RegistrationForm() {
                         </p>
                       </div>
                     </div>
-<div className="mt-4 rounded-2xl bg-white p-4">
-  <p className="text-xs font-semibold uppercase tracking-wide text-cyan-700">
-    Цагийн хуваарь
-  </p>
+                    <div className="mt-4 rounded-2xl bg-white p-4">
+                      <p className="text-xs font-semibold uppercase tracking-wide text-cyan-700">
+                        Цагийн хуваарь
+                      </p>
 
-  {selectedSchedule.slots.length > 0 ? (
-    <ul className="mt-3 space-y-2">
-      {selectedSchedule.slots.map((slot, index) => (
-        <li
-          key={`${slot.day}-${slot.startTime}-${slot.endTime}-${index}`}
-          className="flex items-center justify-between rounded-xl bg-slate-50 px-4 py-3"
-        >
-          <span className="font-medium text-slate-800">
-            {dayMap[slot.day] ?? slot.day}
-          </span>
-          <span className="text-slate-600">
-            {slot.startTime} - {slot.endTime}
-          </span>
-        </li>
-      ))}
-    </ul>
-  ) : (
-    <p className="mt-3 rounded-xl bg-slate-50 px-4 py-3 text-sm text-slate-600">
-      Цагийн хуваарь тогтмол биш
-    </p>
-  )}
-</div>
+                      {selectedSchedule.slots.length > 0 ? (
+                        <ul className="mt-3 space-y-2">
+                          {selectedSchedule.slots.map((slot, index) => (
+                            <li
+                              key={`${slot.day}-${slot.startTime}-${slot.endTime}-${index}`}
+                              className="flex items-center justify-between rounded-xl bg-slate-50 px-4 py-3"
+                            >
+                              <span className="font-medium text-slate-800">
+                                {dayMap[slot.day] ?? slot.day}
+                              </span>
+                              <span className="text-slate-600">
+                                {slot.startTime} - {slot.endTime}
+                              </span>
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <p className="mt-3 rounded-xl bg-slate-50 px-4 py-3 text-sm text-slate-600">
+                          Цагийн хуваарь тогтмол биш
+                        </p>
+                      )}
+                    </div>
                   </div>
                 ) : (
                   <div className="rounded-[24px] border border-dashed border-slate-300 bg-slate-50 p-5">
