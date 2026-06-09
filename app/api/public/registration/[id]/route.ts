@@ -42,6 +42,7 @@ export async function GET(
         scheduleTemplateId: String(registration.scheduleTemplateId),
         status: registration.status,
         paymentStatus: registration.paymentStatus,
+        amount: registration.amount,
         qpayInvoiceId: registration.qpayInvoiceId,
         qpayPaymentId: registration.qpayPaymentId,
         qpayQrText: registration.qpayQrText,

@@ -33,6 +33,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       scheduleTemplateId: String(item.scheduleTemplateId),
       status: item.status,
       paymentStatus: item.paymentStatus,
+      amount: item.amount,
       qpayInvoiceId: item.qpayInvoiceId,
       qpayPaymentId: item.qpayPaymentId,
       qpayQrText: item.qpayQrText,

@@ -92,6 +92,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       scheduleTemplateId: classOption.scheduleTemplateId,
       status: "payment_pending",
       paymentStatus: "pending",
+      amount: classOption.price,
       qpayInvoiceId: "",
       qpayPaymentId: "",
       qpayQrText: "",

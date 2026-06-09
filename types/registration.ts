@@ -24,6 +24,7 @@ export interface RegistrationDto {
   scheduleTemplateId: string;
   status: string;
   paymentStatus: string;
+  amount?: number;
   qpayInvoiceId?: string;
   qpayPaymentId?: string;
   qpayQrText?: string;
